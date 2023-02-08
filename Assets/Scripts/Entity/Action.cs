@@ -16,15 +16,15 @@ static public class Action {
       return;
     }
 
-    if (SaveManager.instance.CurrentFloor == 1 && tileName == MapManager.instance.UpStairsTile.name) {
+    if (SaveManager.instance.currentFloor == 1 && tileName == MapManager.instance.UpStairsTile.name) {
       UIManager.instance.AddMessage("A mysterious force prevents you from going back.", "#0da2ff");
       return;
     }
 
     SaveManager.instance.SaveGame();
-    SaveManager.instance.CurrentFloor += tileName == MapManager.instance.UpStairsTile.name ? -1 : 1;
+    SaveManager.instance.currentFloor += tileName == MapManager.instance.UpStairsTile.name ? -1 : 1;
 
-    if (SaveManager.instance.Save.Scenes.Exists(x => x.FloorNumber == SaveManager.instance.CurrentFloor)) {
+    if (SaveManager.instance.save.scenes.Exists(x => x.floorNumber == SaveManager.instance.currentFloor)) {
       SaveManager.instance.LoadScene(false);
     } else {
       GameManager.instance.Reset(false);
@@ -32,7 +32,7 @@ static public class Action {
     }
 
     UIManager.instance.AddMessage("You take the stairs.", "#0da2ff");
-    UIManager.instance.SetDungeonFloorText(SaveManager.instance.CurrentFloor);
+    UIManager.instance.SetDungeonFloorText(SaveManager.instance.currentFloor);
   }
 
   static public bool BumpAction(Actor actor, Vector2 direction) {

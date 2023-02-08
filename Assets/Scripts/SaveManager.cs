@@ -7,13 +7,9 @@ using UnityEngine.SceneManagement;
 public class SaveManager : MonoBehaviour {
   public static SaveManager instance;
 
-  [SerializeField] private int currentFloor = 0;
+  [field: SerializeField] public int currentFloor { get; set; } = 0;
   [SerializeField] private string saveFileName = "saveThe.koala";
-  [SerializeField] private SaveData save = new SaveData();
-
-  public int CurrentFloor { get => currentFloor; set => currentFloor = value; }
-  public SaveData Save { get => save; set => save = value; }
-
+  [field: SerializeField] public SaveData save { get; set; }
 
   private void Awake() {
     if (SaveManager.instance == null) {
@@ -34,20 +30,20 @@ public class SaveManager : MonoBehaviour {
   }
 
   public void SaveGame(bool tempSave = true) {
-    save.SavedFloor = currentFloor;
+    save.savedFloor = currentFloor;
 
-    bool hasScene = save.Scenes.Find(x => x.FloorNumber == currentFloor) is not null;
+    bool hasScene = save.scenes.Find(x => x.floorNumber == currentFloor) is not null;
     if (hasScene) {
       UpdateScene(SaveState());
     } else {
       AddScene(SaveState());
     }
 
-    if (!tempSave) {
-      string path = Path.Combine(Application.persistentDataPath, saveFileName);
-      byte[] saveJson = SerializationUtility.SerializeValue(save, DataFormat.JSON); //Serialize the state to JSON
-      File.WriteAllBytes(path, saveJson); //Save the state to a file
-    }
+    if (tempSave) return;
+
+    string path = Path.Combine(Application.persistentDataPath, saveFileName);
+    byte[] saveJson = SerializationUtility.SerializeValue(save, DataFormat.JSON); //Serialize the state to JSON
+    File.WriteAllBytes(path, saveJson); //Save the state to a file
   }
 
   public void LoadGame() {
@@ -55,7 +51,7 @@ public class SaveManager : MonoBehaviour {
     byte[] saveJson = File.ReadAllBytes(path); //Load the state from the file
     save = SerializationUtility.DeserializeValue<SaveData>(saveJson, DataFormat.JSON); //Deserialize the state from JSON
 
-    currentFloor = save.SavedFloor;
+    currentFloor = save.savedFloor;
 
     if (SceneManager.GetActiveScene().name is not "Dungeon") {
       SceneManager.LoadScene("Dungeon");
@@ -69,12 +65,12 @@ public class SaveManager : MonoBehaviour {
     File.Delete(path);
   }
 
-  public void AddScene(SceneState sceneState) => save.Scenes.Add(sceneState);
+  public void AddScene(SceneState sceneState) => save.scenes.Add(sceneState);
 
-  public void UpdateScene(SceneState sceneState) => save.Scenes[currentFloor - 1] = sceneState;
+  public void UpdateScene(SceneState sceneState) => save.scenes[currentFloor - 1] = sceneState;
 
   public void LoadScene(bool canRemovePlayer = true) {
-    SceneState sceneState = save.Scenes.Find(x => x.FloorNumber == currentFloor);
+    SceneState sceneState = save.scenes.Find(x => x.floorNumber == currentFloor);
     if (sceneState is not null) {
       LoadState(sceneState, canRemovePlayer);
     } else {
@@ -89,19 +85,15 @@ public class SaveManager : MonoBehaviour {
   );
 
   public void LoadState(SceneState sceneState, bool canRemovePlayer) {
-    MapManager.instance.LoadState(sceneState.MapState);
-    GameManager.instance.LoadState(sceneState.GameState, canRemovePlayer);
+    MapManager.instance.LoadState(sceneState.mapState);
+    GameManager.instance.LoadState(sceneState.gameState, canRemovePlayer);
   }
 }
 
 [System.Serializable]
 public class SaveData {
-  [SerializeField] private int savedFloor;
-
-  [SerializeField] private List<SceneState> scenes;
-
-  public int SavedFloor { get => savedFloor; set => savedFloor = value; }
-  public List<SceneState> Scenes { get => scenes; set => scenes = value; }
+  [field: SerializeField] public int savedFloor { get; set; }
+  [field: SerializeField] public List<SceneState> scenes { get; set; }
 
   public SaveData() {
     savedFloor = 0;
@@ -111,12 +103,9 @@ public class SaveData {
 
 [System.Serializable]
 public class SceneState {
-  [SerializeField] private int floorNumber;
-  [SerializeField] private GameState gameState;
-  [SerializeField] private MapState mapState;
-  public int FloorNumber { get => floorNumber; set => floorNumber = value; }
-  public GameState GameState { get => gameState; set => gameState = value; }
-  public MapState MapState { get => mapState; set => mapState = value; }
+  [field: SerializeField] public int floorNumber { get; set; }
+  [field: SerializeField] public GameState gameState { get; set; }
+  [field: SerializeField] public MapState mapState { get; set; }
 
   public SceneState(int floorNumber, GameState gameState, MapState mapState) {
     this.floorNumber = floorNumber;

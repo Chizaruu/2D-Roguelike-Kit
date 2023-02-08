@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
   [field: Header("Entities")]
   [field: SerializeField] public List<Entity> entities { get; private set; }
   [field: SerializeField] public List<Actor> actors { get; private set; }
-  private Queue<Actor> actorQueue;
+  private Queue<Actor> actorQueue = new Queue<Actor>();
 
   [field: Header("Death")]
   [field: SerializeField] public Sprite deadSprite { get; private set; }
@@ -30,12 +30,11 @@ public class GameManager : MonoBehaviour {
   }
 
   private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-    SceneState sceneState = SaveManager.instance.Save.Scenes.Find(x => x.FloorNumber == SaveManager.instance.CurrentFloor);
+    SceneState sceneState = SaveManager.instance.save.scenes.Find(x => x.floorNumber == SaveManager.instance.currentFloor);
 
     if (sceneState is not null) {
-      LoadState(sceneState.GameState, true);
+      LoadState(sceneState.gameState, true);
     } else {
-      actorQueue = new Queue<Actor>();
       entities = new List<Entity>();
       actors = new List<Actor>();
     }

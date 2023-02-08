@@ -60,9 +60,9 @@ public class UIManager : MonoBehaviour {
   }
 
   private void Start() {
-    SetDungeonFloorText(SaveManager.instance.CurrentFloor);
+    SetDungeonFloorText(SaveManager.instance.currentFloor);
 
-    if (SaveManager.instance.Save.SavedFloor is 0) {
+    if (SaveManager.instance.save.savedFloor is 0) {
       AddMessage("Hello and welcome, adventurer, to yet another dungeon!", "#0da2ff"); //Light blue
     } else {
       AddMessage("Welcome back, adventurer!", "#0da2ff"); //Light blue

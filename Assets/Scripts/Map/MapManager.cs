@@ -55,10 +55,10 @@ public class MapManager : MonoBehaviour {
   }
 
   private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-    SceneState sceneState = SaveManager.instance.Save.Scenes.Find(x => x.FloorNumber == SaveManager.instance.CurrentFloor);
+    SceneState sceneState = SaveManager.instance.save.scenes.Find(x => x.floorNumber == SaveManager.instance.currentFloor);
 
     if (sceneState is not null) {
-      LoadState(sceneState.MapState);
+      LoadState(sceneState.mapState);
     } else {
       GenerateDungeon(true);
     }

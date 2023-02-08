@@ -20,7 +20,7 @@ public class MainMenu : MonoBehaviour {
       SaveManager.instance.DeleteSave();
     }
 
-    SaveManager.instance.CurrentFloor = 1;
+    SaveManager.instance.currentFloor = 1;
     SceneManager.LoadScene("Dungeon");
   }
 

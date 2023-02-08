@@ -102,7 +102,7 @@ sealed class ProcGen {
         TunnelBetween(rooms[rooms.Count - 1], newRoom);
       }
 
-      PlaceEntities(newRoom, SaveManager.instance.CurrentFloor);
+      PlaceEntities(newRoom, SaveManager.instance.currentFloor);
 
       rooms.Add(newRoom);
     }
