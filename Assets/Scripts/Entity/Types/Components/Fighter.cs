@@ -63,14 +63,14 @@ public class Fighter : MonoBehaviour {
   }
 
   public void Die() {
-    if (GetComponent<Actor>().isAlive) {
+    if (GetComponent<Actor>().IsAlive) {
       if (GetComponent<Player>()) {
         UIManager.instance.AddMessage("You died!", "#ff0000"); //Red
       } else {
-        GameManager.instance.actors[0].GetComponent<Level>().AddExperience(GetComponent<Level>().XPGiven); //Give XP to player
+        GameManager.instance.Actors[0].GetComponent<Level>().AddExperience(GetComponent<Level>().XPGiven); //Give XP to player
         UIManager.instance.AddMessage($"{name} is dead!", "#ffa500"); //Light Orange
       }
-      GetComponent<Actor>().isAlive = false;
+      GetComponent<Actor>().IsAlive = false;
     }
 
     SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
@@ -79,7 +79,7 @@ public class Fighter : MonoBehaviour {
     spriteRenderer.sortingOrder = 0;
 
     name = $"Remains of {name}";
-    GetComponent<Actor>().blocksMovement = false;
+    GetComponent<Actor>().BlocksMovement = false;
     if (!GetComponent<Player>()) {
       GameManager.instance.RemoveActor(this.GetComponent<Actor>());
     }
@@ -114,7 +114,7 @@ public class Fighter : MonoBehaviour {
     hp = state.Hp;
     baseDefense = state.Defense;
     basePower = state.Power;
-    target = GameManager.instance.actors.Find(a => a.name == state.Target);
+    target = GameManager.instance.Actors.Find(a => a.name == state.Target);
   }
 }
 

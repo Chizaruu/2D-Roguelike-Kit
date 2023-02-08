@@ -43,10 +43,10 @@ public class MapManager : MonoBehaviour {
   }
 
   private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-    SceneState sceneState = SaveManager.instance.save.scenes.Find(x => x.floorNumber == SaveManager.instance.currentFloor);
+    SceneState sceneState = SaveManager.instance.Save.Scenes.Find(x => x.FloorNumber == SaveManager.instance.CurrentFloor);
 
     if (sceneState is not null) {
-      LoadState(sceneState.mapState);
+      LoadState(sceneState.MapState);
     } else {
       GenerateDungeon(true);
     }
@@ -111,7 +111,7 @@ public class MapManager : MonoBehaviour {
   }
 
   public void SetEntitiesVisibilities() {
-    foreach (Entity entity in GameManager.instance.entities) {
+    foreach (Entity entity in GameManager.instance.Entities) {
       if (entity.GetComponent<Player>()) {
         continue;
       }

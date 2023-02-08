@@ -16,15 +16,15 @@ static public class Action {
       return;
     }
 
-    if (SaveManager.instance.currentFloor == 1 && tileName == MapManager.instance.upStairsTile.name) {
+    if (SaveManager.instance.CurrentFloor == 1 && tileName == MapManager.instance.upStairsTile.name) {
       UIManager.instance.AddMessage("A mysterious force prevents you from going back.", "#0da2ff");
       return;
     }
 
     SaveManager.instance.SaveGame();
-    SaveManager.instance.currentFloor += tileName == MapManager.instance.upStairsTile.name ? -1 : 1;
+    SaveManager.instance.CurrentFloor += tileName == MapManager.instance.upStairsTile.name ? -1 : 1;
 
-    if (SaveManager.instance.save.scenes.Exists(x => x.floorNumber == SaveManager.instance.currentFloor)) {
+    if (SaveManager.instance.Save.Scenes.Exists(x => x.FloorNumber == SaveManager.instance.CurrentFloor)) {
       SaveManager.instance.LoadScene(false);
     } else {
       GameManager.instance.Reset(false);
@@ -32,7 +32,7 @@ static public class Action {
     }
 
     UIManager.instance.AddMessage("You take the stairs.", "#0da2ff");
-    UIManager.instance.SetDungeonFloorText(SaveManager.instance.currentFloor);
+    UIManager.instance.SetDungeonFloorText(SaveManager.instance.CurrentFloor);
   }
 
   static public bool BumpAction(Actor actor, Vector2 direction) {
@@ -76,18 +76,18 @@ static public class Action {
   }
 
   static public void PickupAction(Actor actor) {
-    for (int i = 0; i < GameManager.instance.entities.Count; i++) {
-      if (GameManager.instance.entities[i].GetComponent<Actor>() || actor.transform.position != GameManager.instance.entities[i].transform.position) {
+    for (int i = 0; i < GameManager.instance.Entities.Count; i++) {
+      if (GameManager.instance.Entities[i].GetComponent<Actor>() || actor.transform.position != GameManager.instance.Entities[i].transform.position) {
         continue;
       }
 
-      if (actor.inventory.Items.Count >= actor.inventory.Capacity) {
+      if (actor.Inventory.Items.Count >= actor.Inventory.Capacity) {
         UIManager.instance.AddMessage($"Your inventory is full.", "#808080");
         return;
       }
 
-      Item item = GameManager.instance.entities[i].GetComponent<Item>();
-      actor.inventory.Add(item);
+      Item item = GameManager.instance.Entities[i].GetComponent<Item>();
+      actor.Inventory.Add(item);
 
       UIManager.instance.AddMessage($"You picked up the {item.name}!", "#FFFFFF");
       GameManager.instance.EndTurn();
@@ -95,11 +95,11 @@ static public class Action {
   }
 
   static public void DropAction(Actor actor, Item item) {
-    if (actor.equipment.ItemIsEquipped(item)) {
-      actor.equipment.ToggleEquip(item);
+    if (actor.Equipment.ItemIsEquipped(item)) {
+      actor.Equipment.ToggleEquip(item);
     }
 
-    actor.inventory.Drop(item);
+    actor.Inventory.Drop(item);
 
     UIManager.instance.ToggleDropMenu();
     GameManager.instance.EndTurn();
@@ -125,7 +125,7 @@ static public class Action {
       return;
     }
 
-    actor.equipment.ToggleEquip(item);
+    actor.Equipment.ToggleEquip(item);
 
     UIManager.instance.ToggleInventory();
     GameManager.instance.EndTurn();

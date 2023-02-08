@@ -4,11 +4,11 @@ using UnityEngine;
 /// A generic class to represent players, enemies, items, etc.
 /// </summary>
 public class Entity : MonoBehaviour {
-  [field: SerializeField] public bool blocksMovement { get; set; }
-  [field: SerializeField] public SpriteRenderer spriteRenderer { get; private set; }
-  
+  [field: SerializeField] public bool BlocksMovement { get; set; }
+  [field: SerializeField] public SpriteRenderer SpriteRenderer { get; private set; }
+
   public virtual void AddToGameManager() {
-    if (GameManager.instance.entities.Contains(this))
+    if (GameManager.instance.Entities.Contains(this))
     {
       return;
     }
@@ -44,17 +44,17 @@ public class EntityState {
     Item,
     Other
   }
-  [field: SerializeField] public EntityType type { get; set; }
-  [field: SerializeField] public string name { get; set; }
-  [field: SerializeField] public bool blocksMovement { get; set; }
-  [field: SerializeField] public bool isVisible { get; set; }
-  [field: SerializeField] public Vector3 position { get; set; }
+  [field: SerializeField] public EntityType Type { get; set; }
+  [field: SerializeField] public string Name { get; set; }
+  [field: SerializeField] public bool BlocksMovement { get; set; }
+  [field: SerializeField] public bool IsVisible { get; set; }
+  [field: SerializeField] public Vector3 Position { get; set; }
 
   public EntityState(EntityType type = EntityType.Other, string name = "", bool blocksMovement = false, bool isVisible = false, Vector3 position = new Vector3()) {
-    this.type = type;
-    this.name = name;
-    this.blocksMovement = blocksMovement;
-    this.isVisible = isVisible;
-    this.position = position;
+    this.Type = type;
+    this.Name = name;
+    this.BlocksMovement = blocksMovement;
+    this.IsVisible = isVisible;
+    this.Position = position;
   }
 }

@@ -102,15 +102,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68dca875eddbc041b2f5d4fac65a464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <blocksMovement>k__BackingField: 1
-  isAlive: 1
+  <BlocksMovement>k__BackingField: 1
+  <SpriteRenderer>k__BackingField: {fileID: 5596009288642769278}
+  <isAlive>k__BackingField: 1
   fieldOfViewRange: 8
-  fieldOfView: []
-  inventory: {fileID: 0}
-  equipment: {fileID: 4442182830498546135}
-  aI: {fileID: 4906761112842409411}
-  fighter: {fileID: 1657599316176765477}
-  level: {fileID: 9192059058365056716}
+  <fieldOfView>k__BackingField: []
+  <inventory>k__BackingField: {fileID: 0}
+  <equipment>k__BackingField: {fileID: 4442182830498546135}
+  <aI>k__BackingField: {fileID: 4906761112842409411}
+  <fighter>k__BackingField: {fileID: 1657599316176765477}
+  <level>k__BackingField: {fileID: 9192059058365056716}
 --- !u!114 &1657599316176765477
 MonoBehaviour:
   m_ObjectHideFlags: 0

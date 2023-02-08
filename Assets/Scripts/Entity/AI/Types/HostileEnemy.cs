@@ -12,14 +12,14 @@ public class HostileEnemy : AI {
 
   public override void RunAI() {
     if (!fighter.Target) {
-      fighter.Target = GameManager.instance.actors[0];
-    } else if (fighter.Target && !fighter.Target.isAlive) {
+      fighter.Target = GameManager.instance.Actors[0];
+    } else if (fighter.Target && !fighter.Target.IsAlive) {
       fighter.Target = null;
     }
 
     if (fighter.Target) {
       Vector3Int targetPosition = MapManager.instance.floorMap.WorldToCell(fighter.Target.transform.position);
-      if (isFighting || GetComponent<Actor>().fieldOfView.Contains(targetPosition)) {
+      if (isFighting || GetComponent<Actor>().FieldOfView.Contains(targetPosition)) {
         if (!isFighting) {
           isFighting = true;
         }

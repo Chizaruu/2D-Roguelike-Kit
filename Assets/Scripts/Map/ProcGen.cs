@@ -102,7 +102,7 @@ sealed class ProcGen {
         TunnelBetween(rooms[rooms.Count - 1], newRoom);
       }
 
-      PlaceEntities(newRoom, SaveManager.instance.currentFloor);
+      PlaceEntities(newRoom, SaveManager.instance.CurrentFloor);
 
       rooms.Add(newRoom);
     }
@@ -120,7 +120,7 @@ sealed class ProcGen {
     MapManager.instance.floorMap.SetTile(playerPos, MapManager.instance.upStairsTile);
 
     if (!isNewGame) {
-      GameManager.instance.actors[0].transform.position = new Vector3(playerPos.x + 0.5f, playerPos.y + 0.5f, 0);
+      GameManager.instance.Actors[0].transform.position = new Vector3(playerPos.x + 0.5f, playerPos.y + 0.5f, 0);
     } else {
       GameObject player = MapManager.instance.CreateEntity("Player", (Vector2Int)playerPos);
       Actor playerActor = player.GetComponent<Actor>();
@@ -128,11 +128,11 @@ sealed class ProcGen {
       Item starterWeapon = MapManager.instance.CreateEntity("Dagger", (Vector2Int)playerPos).GetComponent<Item>();
       Item starterArmor = MapManager.instance.CreateEntity("Leather Armor", (Vector2Int)playerPos).GetComponent<Item>();
 
-      playerActor.inventory.Add(starterWeapon);
-      playerActor.inventory.Add(starterArmor);
+      playerActor.Inventory.Add(starterWeapon);
+      playerActor.Inventory.Add(starterArmor);
 
-      playerActor.equipment.EquipToSlot("Weapon", starterWeapon, false);
-      playerActor.equipment.EquipToSlot("Armor", starterArmor, false);
+      playerActor.Equipment.EquipToSlot("Weapon", starterWeapon, false);
+      playerActor.Equipment.EquipToSlot("Armor", starterArmor, false);
     }
   }
 

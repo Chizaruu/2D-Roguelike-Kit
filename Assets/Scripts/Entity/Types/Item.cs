@@ -18,14 +18,14 @@ public class Item : Entity {
 
   public override EntityState SaveState() => new ItemState(
       name: name,
-      blocksMovement: blocksMovement,
+      blocksMovement: BlocksMovement,
       isVisible: MapManager.instance.visibleTiles.Contains(MapManager.instance.floorMap.WorldToCell(transform.position)),
       position: transform.position,
       parent: transform.parent != null ? transform.parent.gameObject.name : ""
     );
 
   public void LoadState(ItemState state) {
-    if (!state.isVisible) {
+    if (!state.IsVisible) {
       GetComponent<SpriteRenderer>().enabled = false;
     }
 
@@ -33,12 +33,12 @@ public class Item : Entity {
       GameObject parent = GameObject.Find(state.Parent);
       parent.GetComponent<Inventory>().Add(this);
 
-      if (equippable is not null && state.name.Contains("(E)")) {
+      if (equippable is not null && state.Name.Contains("(E)")) {
         parent.GetComponent<Equipment>().EquipToSlot(equippable.EquipmentType.ToString(), this, false);
       }
     }
 
-    transform.position = state.position;
+    transform.position = state.Position;
   }
 }
 

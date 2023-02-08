@@ -5,7 +5,7 @@ public class Healing : Consumable {
   [field: SerializeField] public int amount { get; private set; } = 4;
 
   public override bool Activate(Actor consumer) {
-    int amountRecovered = consumer.fighter.Heal(amount);
+    int amountRecovered = consumer.Fighter.Heal(amount);
 
     if (amountRecovered > 0) {
       UIManager.instance.AddMessage($"You consume the {name}, and recover {amountRecovered} HP!", "#00FF00");

@@ -598,9 +598,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseTime: 0.075
   delayTime: 0
-  <isPlayerTurn>k__BackingField: 1
-  <entities>k__BackingField: []
-  <actors>k__BackingField: []
+  <IsPlayerTurn>k__BackingField: 1
+  <Entities>k__BackingField: []
+  <Actors>k__BackingField: []
   <deadSprite>k__BackingField: {fileID: 1552831975, guid: d5e9a53ff63e1d04bbc1df4c7c3666be, type: 3}
 --- !u!4 &1312308580
 Transform:

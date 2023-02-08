@@ -98,8 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad6efbf19bfae646bb1ddf80221b3ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blocksMovement: 0
+  <BlocksMovement>k__BackingField: 0
+  <SpriteRenderer>k__BackingField: {fileID: 3799066079496829687}
   consumable: {fileID: 4600946401551887390}
+  equippable: {fileID: 0}
 --- !u!114 &4600946401551887390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,5 +114,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed38bc8509512e34789dc73374fdb650, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
-  maximumRange: 5
+  <damage>k__BackingField: 20
+  <maximumRange>k__BackingField: 5

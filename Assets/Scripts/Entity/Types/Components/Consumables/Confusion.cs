@@ -4,7 +4,7 @@ public class Confusion : Consumable {
   [field: SerializeField] public int numberOfTurns { get; private set; } = 10;
 
   public override bool Activate(Actor consumer) {
-    consumer.inventory.SelectedConsumable = this;
+    consumer.Inventory.SelectedConsumable = this;
     consumer.GetComponent<Player>().ToggleTargetMode();
     UIManager.instance.AddMessage($"Select a target to confuse.", "#63FFFF");
     return false;
@@ -14,17 +14,17 @@ public class Confusion : Consumable {
     if (target.TryGetComponent(out ConfusedEnemy confusedEnemy)) {
       if (confusedEnemy.TurnsRemaining > 0) {
         UIManager.instance.AddMessage($"The {target.name} is already confused.", "#FF0000");
-        consumer.inventory.SelectedConsumable = null;
+        consumer.Inventory.SelectedConsumable = null;
         return false;
       }
     } else {
       confusedEnemy = target.gameObject.AddComponent<ConfusedEnemy>();
     }
-    confusedEnemy.PreviousAI = target.aI;
+    confusedEnemy.PreviousAI = target.AI;
     confusedEnemy.TurnsRemaining = numberOfTurns;
 
     UIManager.instance.AddMessage($"The eyes of the {target.name} look vacant, as it starts to stumble around!", "#FF0000");
-    target.aI = confusedEnemy;
+    target.AI = confusedEnemy;
     Consume(consumer);
     consumer.GetComponent<Player>().ToggleTargetMode();
     return true;

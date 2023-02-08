@@ -16,8 +16,8 @@ public class ConfusedEnemy : AI {
     // Revert the AI back to the original state if the effect has run its course.
     if (turnsRemaining <= 0) {
       UIManager.instance.AddMessage($"The {gameObject.name} is no longer confused.", "#FF0000");
-      GetComponent<Actor>().aI = previousAI;
-      GetComponent<Actor>().aI.RunAI();
+      GetComponent<Actor>().AI = previousAI;
+      GetComponent<Actor>().AI.RunAI();
       Destroy(this);
     } else {
       // Move randomly.

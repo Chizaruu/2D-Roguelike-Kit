@@ -60,9 +60,9 @@ public class UIManager : MonoBehaviour {
   }
 
   private void Start() {
-    SetDungeonFloorText(SaveManager.instance.currentFloor);
+    SetDungeonFloorText(SaveManager.instance.CurrentFloor);
 
-    if (SaveManager.instance.save.savedFloor is 0) {
+    if (SaveManager.instance.Save.SavedFloor is 0) {
       AddMessage("Hello and welcome, adventurer, to yet another dungeon!", "#0da2ff"); //Light blue
     } else {
       AddMessage("Welcome back, adventurer!", "#0da2ff"); //Light blue
@@ -253,9 +253,9 @@ public class UIManager : MonoBehaviour {
 
     char c = 'a';
 
-    for (int itemNum = 0; itemNum < actor.inventory.Items.Count; itemNum++) {
+    for (int itemNum = 0; itemNum < actor.Inventory.Items.Count; itemNum++) {
       GameObject menuContentChild = menuContent.transform.GetChild(itemNum).gameObject;
-      Item item = actor.inventory.Items[itemNum];
+      Item item = actor.Inventory.Items[itemNum];
       menuContentChild.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"({c++}) {item.name}";
       menuContentChild.GetComponent<Button>().onClick.AddListener(() => {
         if (menuContent == inventoryContent) {

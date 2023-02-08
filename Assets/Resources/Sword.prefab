@@ -98,7 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad6efbf19bfae646bb1ddf80221b3ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blocksMovement: 0
+  <BlocksMovement>k__BackingField: 0
+  <SpriteRenderer>k__BackingField: {fileID: 3799066079496829687}
   consumable: {fileID: 0}
   equippable: {fileID: 337276904647084753}
 --- !u!114 &337276904647084753

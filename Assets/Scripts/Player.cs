@@ -24,7 +24,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
   }
 
   void Controls.IPlayerActions.OnMovement(InputAction.CallbackContext context) {
-    if (context.started && GetComponent<Actor>().isAlive) {
+    if (context.started && GetComponent<Actor>().IsAlive) {
       if (targetMode && !moveKeyDown) {
         moveKeyDown = true;
         Move();
@@ -146,7 +146,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
 
   private void FixedUpdate() {
     if (!UIManager.instance.IsMenuOpen && !targetMode) {
-      if (GameManager.instance.isPlayerTurn && moveKeyDown && GetComponent<Actor>().isAlive) {
+      if (GameManager.instance.IsPlayerTurn && moveKeyDown && GetComponent<Actor>().IsAlive) {
         Move();
       }
     }
@@ -166,7 +166,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
     if (targetMode) {
       Vector3Int targetGridPosition = MapManager.instance.floorMap.WorldToCell(futurePosition);
 
-      if (MapManager.instance.IsValidPosition(futurePosition) && GetComponent<Actor>().fieldOfView.Contains(targetGridPosition)) {
+      if (MapManager.instance.IsValidPosition(futurePosition) && GetComponent<Actor>().FieldOfView.Contains(targetGridPosition)) {
         targetObject.transform.position = futurePosition;
       }
     } else {
@@ -175,7 +175,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
   }
 
   private bool CanAct() {
-    if (targetMode || UIManager.instance.IsMenuOpen || !GetComponent<Actor>().isAlive) {
+    if (targetMode || UIManager.instance.IsMenuOpen || !GetComponent<Actor>().IsAlive) {
       return false;
     } else {
       return true;
@@ -207,7 +207,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
     Bounds targetBounds = new Bounds(targetPosition, Vector3.one * radius * 2);
     List<Actor> targets = new List<Actor>();
 
-    foreach (Actor target in GameManager.instance.actors) {
+    foreach (Actor target in GameManager.instance.Actors) {
       if (targetBounds.Contains(target.transform.position)) {
         targets.Add(target);
       }
