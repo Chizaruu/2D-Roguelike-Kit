@@ -73,7 +73,7 @@ public class Actor : Entity {
     isAlive: IsAlive,
     isVisible: MapManager.instance.visibleTiles.Contains(MapManager.instance.floorMap.WorldToCell(transform.position)),
     position: transform.position,
-    currentAI: AI != null ? AI.SaveState() : null,
+    aiState: AI != null ? AI.State : null,
     fighterState: Fighter != null ? Fighter.State : null,
     levelState: Level != null && GetComponent<Player>() ? Level.State : null
   );
@@ -90,17 +90,23 @@ public class Actor : Entity {
       SpriteRenderer.enabled = false;
     }
 
-    if (savedState.CurrentAI != null) {
-      if (savedState.CurrentAI.Type == "HostileEnemy") {
-        AI = GetComponent<HostileEnemy>();
-      } else if (savedState.CurrentAI.Type == "ConfusedEnemy") {
-        AI = gameObject.AddComponent<ConfusedEnemy>();
+    if (savedState.AIState != null)
+    {
+      AI.State = savedState.AIState;
 
-        ConfusedState confusedState = savedState.CurrentAI as ConfusedState;
-        ((ConfusedEnemy)AI).LoadState(confusedState);
+      switch (savedState.AIState.Type)
+      {
+        case "HostileEnemy":
+          AI = GetComponent<HostileEnemy>();
+          break;
+        case "ConfusedEnemy":
+          AI = gameObject.AddComponent<ConfusedEnemy>();
+          (AI as ConfusedEnemy).SetPreviousAI();
+          break;
+        default:
+          break;
       }
     }
-
     if (savedState.FighterState != null) {
       Fighter.State.Load(savedState.FighterState);
     }
@@ -114,14 +120,14 @@ public class Actor : Entity {
 [System.Serializable]
 public class ActorState : EntityState {
   [field: SerializeField] public bool IsAlive { get; set; }
-  [field: SerializeField] public AIState CurrentAI { get; set; }
+  [field: SerializeField] public AIState AIState { get; set; }
   [field: SerializeField] public FighterState FighterState { get; set; }
   [field: SerializeField] public LevelState LevelState { get; set; }
 
   public ActorState(EntityType type = EntityType.Actor, string name = "", bool blocksMovement = false, bool isVisible = false, Vector3 position = new Vector3(),
-   bool isAlive = true, AIState currentAI = null, FighterState fighterState = null, LevelState levelState = null) : base(type, name, blocksMovement, isVisible, position) {
+   bool isAlive = true, AIState aiState = null, FighterState fighterState = null, LevelState levelState = null) : base(type, name, blocksMovement, isVisible, position) {
     this.IsAlive = isAlive;
-    this.CurrentAI = currentAI;
+    this.AIState = aiState;
     this.FighterState = fighterState;
     this.LevelState = levelState;
   }

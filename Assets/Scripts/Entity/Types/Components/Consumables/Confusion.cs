@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class Confusion : Consumable {
-  [field: SerializeField] public int numberOfTurns { get; private set; } = 10;
+  [SerializeField] private int numberOfTurns = 10;
 
   public override bool Activate(Actor consumer) {
     consumer.Inventory.SelectedConsumable = this;
@@ -12,7 +12,7 @@ public class Confusion : Consumable {
 
   public override bool Cast(Actor consumer, Actor target) {
     if (target.TryGetComponent(out ConfusedEnemy confusedEnemy)) {
-      if (confusedEnemy.TurnsRemaining > 0) {
+      if (confusedEnemy.State.TurnsRemaining > 0) {
         UIManager.instance.AddMessage($"The {target.name} is already confused.", "#FF0000");
         consumer.Inventory.SelectedConsumable = null;
         return false;
@@ -21,7 +21,7 @@ public class Confusion : Consumable {
       confusedEnemy = target.gameObject.AddComponent<ConfusedEnemy>();
     }
     confusedEnemy.PreviousAI = target.AI;
-    confusedEnemy.TurnsRemaining = numberOfTurns;
+    confusedEnemy.State = new AIState("ConfusedEnemy", confusedEnemy.PreviousAI.State.Type, numberOfTurns);
 
     UIManager.instance.AddMessage($"The eyes of the {target.name} look vacant, as it starts to stumble around!", "#FF0000");
     target.AI = confusedEnemy;
