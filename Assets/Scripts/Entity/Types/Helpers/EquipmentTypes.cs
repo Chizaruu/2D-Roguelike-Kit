@@ -1,4 +1,8 @@
-public enum EquipmentType {
-  Weapon,
-  Armor
+namespace TheSleepyKoala.Entities
+{
+  public enum EquipmentType
+  {
+    Weapon,
+    Armor
+  }
 }

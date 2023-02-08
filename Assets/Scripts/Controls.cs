@@ -15,12 +15,14 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public partial class @Controls : IInputActionCollection2, IDisposable
+namespace TheSleepyKoala
 {
-    public InputActionAsset asset { get; }
-    public @Controls()
+    public partial class @Controls : IInputActionCollection2, IDisposable
     {
-        asset = InputActionAsset.FromJson(@"{
+        public InputActionAsset asset { get; }
+        public @Controls()
+        {
+            asset = InputActionAsset.FromJson(@"{
     ""name"": ""Controls"",
     ""maps"": [
         {
@@ -255,178 +257,179 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         }
     ]
 }");
+            // Player
+            m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+            m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+            m_Player_Exit = m_Player.FindAction("Exit", throwIfNotFound: true);
+            m_Player_View = m_Player.FindAction("View", throwIfNotFound: true);
+            m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
+            m_Player_Pickup = m_Player.FindAction("Pickup", throwIfNotFound: true);
+            m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
+            m_Player_Confirm = m_Player.FindAction("Confirm", throwIfNotFound: true);
+            m_Player_Info = m_Player.FindAction("Info", throwIfNotFound: true);
+        }
+
+        public void Dispose()
+        {
+            UnityEngine.Object.Destroy(asset);
+        }
+
+        public InputBinding? bindingMask
+        {
+            get => asset.bindingMask;
+            set => asset.bindingMask = value;
+        }
+
+        public ReadOnlyArray<InputDevice>? devices
+        {
+            get => asset.devices;
+            set => asset.devices = value;
+        }
+
+        public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+
+        public bool Contains(InputAction action)
+        {
+            return asset.Contains(action);
+        }
+
+        public IEnumerator<InputAction> GetEnumerator()
+        {
+            return asset.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Enable()
+        {
+            asset.Enable();
+        }
+
+        public void Disable()
+        {
+            asset.Disable();
+        }
+        public IEnumerable<InputBinding> bindings => asset.bindings;
+
+        public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
+        {
+            return asset.FindAction(actionNameOrId, throwIfNotFound);
+        }
+        public int FindBinding(InputBinding bindingMask, out InputAction action)
+        {
+            return asset.FindBinding(bindingMask, out action);
+        }
+
         // Player
-        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
-        m_Player_Exit = m_Player.FindAction("Exit", throwIfNotFound: true);
-        m_Player_View = m_Player.FindAction("View", throwIfNotFound: true);
-        m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
-        m_Player_Pickup = m_Player.FindAction("Pickup", throwIfNotFound: true);
-        m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
-        m_Player_Confirm = m_Player.FindAction("Confirm", throwIfNotFound: true);
-        m_Player_Info = m_Player.FindAction("Info", throwIfNotFound: true);
-    }
-
-    public void Dispose()
-    {
-        UnityEngine.Object.Destroy(asset);
-    }
-
-    public InputBinding? bindingMask
-    {
-        get => asset.bindingMask;
-        set => asset.bindingMask = value;
-    }
-
-    public ReadOnlyArray<InputDevice>? devices
-    {
-        get => asset.devices;
-        set => asset.devices = value;
-    }
-
-    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
-
-    public bool Contains(InputAction action)
-    {
-        return asset.Contains(action);
-    }
-
-    public IEnumerator<InputAction> GetEnumerator()
-    {
-        return asset.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    public void Enable()
-    {
-        asset.Enable();
-    }
-
-    public void Disable()
-    {
-        asset.Disable();
-    }
-    public IEnumerable<InputBinding> bindings => asset.bindings;
-
-    public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
-    {
-        return asset.FindAction(actionNameOrId, throwIfNotFound);
-    }
-    public int FindBinding(InputBinding bindingMask, out InputAction action)
-    {
-        return asset.FindBinding(bindingMask, out action);
-    }
-
-    // Player
-    private readonly InputActionMap m_Player;
-    private IPlayerActions m_PlayerActionsCallbackInterface;
-    private readonly InputAction m_Player_Movement;
-    private readonly InputAction m_Player_Exit;
-    private readonly InputAction m_Player_View;
-    private readonly InputAction m_Player_Inventory;
-    private readonly InputAction m_Player_Pickup;
-    private readonly InputAction m_Player_Drop;
-    private readonly InputAction m_Player_Confirm;
-    private readonly InputAction m_Player_Info;
-    public struct PlayerActions
-    {
-        private @Controls m_Wrapper;
-        public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_Player_Movement;
-        public InputAction @Exit => m_Wrapper.m_Player_Exit;
-        public InputAction @View => m_Wrapper.m_Player_View;
-        public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
-        public InputAction @Pickup => m_Wrapper.m_Player_Pickup;
-        public InputAction @Drop => m_Wrapper.m_Player_Drop;
-        public InputAction @Confirm => m_Wrapper.m_Player_Confirm;
-        public InputAction @Info => m_Wrapper.m_Player_Info;
-        public InputActionMap Get() { return m_Wrapper.m_Player; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
-        public void SetCallbacks(IPlayerActions instance)
+        private readonly InputActionMap m_Player;
+        private IPlayerActions m_PlayerActionsCallbackInterface;
+        private readonly InputAction m_Player_Movement;
+        private readonly InputAction m_Player_Exit;
+        private readonly InputAction m_Player_View;
+        private readonly InputAction m_Player_Inventory;
+        private readonly InputAction m_Player_Pickup;
+        private readonly InputAction m_Player_Drop;
+        private readonly InputAction m_Player_Confirm;
+        private readonly InputAction m_Player_Info;
+        public struct PlayerActions
         {
-            if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
+            private @Controls m_Wrapper;
+            public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Movement => m_Wrapper.m_Player_Movement;
+            public InputAction @Exit => m_Wrapper.m_Player_Exit;
+            public InputAction @View => m_Wrapper.m_Player_View;
+            public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
+            public InputAction @Pickup => m_Wrapper.m_Player_Pickup;
+            public InputAction @Drop => m_Wrapper.m_Player_Drop;
+            public InputAction @Confirm => m_Wrapper.m_Player_Confirm;
+            public InputAction @Info => m_Wrapper.m_Player_Info;
+            public InputActionMap Get() { return m_Wrapper.m_Player; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+            public void SetCallbacks(IPlayerActions instance)
             {
-                @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                @Exit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnExit;
-                @Exit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnExit;
-                @Exit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnExit;
-                @View.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnView;
-                @View.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnView;
-                @View.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnView;
-                @Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
-                @Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
-                @Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
-                @Pickup.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickup;
-                @Pickup.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickup;
-                @Pickup.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickup;
-                @Drop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDrop;
-                @Drop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDrop;
-                @Drop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDrop;
-                @Confirm.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnConfirm;
-                @Confirm.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnConfirm;
-                @Confirm.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnConfirm;
-                @Info.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInfo;
-                @Info.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInfo;
-                @Info.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInfo;
-            }
-            m_Wrapper.m_PlayerActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @Movement.started += instance.OnMovement;
-                @Movement.performed += instance.OnMovement;
-                @Movement.canceled += instance.OnMovement;
-                @Exit.started += instance.OnExit;
-                @Exit.performed += instance.OnExit;
-                @Exit.canceled += instance.OnExit;
-                @View.started += instance.OnView;
-                @View.performed += instance.OnView;
-                @View.canceled += instance.OnView;
-                @Inventory.started += instance.OnInventory;
-                @Inventory.performed += instance.OnInventory;
-                @Inventory.canceled += instance.OnInventory;
-                @Pickup.started += instance.OnPickup;
-                @Pickup.performed += instance.OnPickup;
-                @Pickup.canceled += instance.OnPickup;
-                @Drop.started += instance.OnDrop;
-                @Drop.performed += instance.OnDrop;
-                @Drop.canceled += instance.OnDrop;
-                @Confirm.started += instance.OnConfirm;
-                @Confirm.performed += instance.OnConfirm;
-                @Confirm.canceled += instance.OnConfirm;
-                @Info.started += instance.OnInfo;
-                @Info.performed += instance.OnInfo;
-                @Info.canceled += instance.OnInfo;
+                if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
+                {
+                    @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                    @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                    @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                    @Exit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnExit;
+                    @Exit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnExit;
+                    @Exit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnExit;
+                    @View.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnView;
+                    @View.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnView;
+                    @View.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnView;
+                    @Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+                    @Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+                    @Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+                    @Pickup.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickup;
+                    @Pickup.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickup;
+                    @Pickup.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickup;
+                    @Drop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDrop;
+                    @Drop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDrop;
+                    @Drop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDrop;
+                    @Confirm.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnConfirm;
+                    @Confirm.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnConfirm;
+                    @Confirm.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnConfirm;
+                    @Info.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInfo;
+                    @Info.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInfo;
+                    @Info.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInfo;
+                }
+                m_Wrapper.m_PlayerActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Movement.started += instance.OnMovement;
+                    @Movement.performed += instance.OnMovement;
+                    @Movement.canceled += instance.OnMovement;
+                    @Exit.started += instance.OnExit;
+                    @Exit.performed += instance.OnExit;
+                    @Exit.canceled += instance.OnExit;
+                    @View.started += instance.OnView;
+                    @View.performed += instance.OnView;
+                    @View.canceled += instance.OnView;
+                    @Inventory.started += instance.OnInventory;
+                    @Inventory.performed += instance.OnInventory;
+                    @Inventory.canceled += instance.OnInventory;
+                    @Pickup.started += instance.OnPickup;
+                    @Pickup.performed += instance.OnPickup;
+                    @Pickup.canceled += instance.OnPickup;
+                    @Drop.started += instance.OnDrop;
+                    @Drop.performed += instance.OnDrop;
+                    @Drop.canceled += instance.OnDrop;
+                    @Confirm.started += instance.OnConfirm;
+                    @Confirm.performed += instance.OnConfirm;
+                    @Confirm.canceled += instance.OnConfirm;
+                    @Info.started += instance.OnInfo;
+                    @Info.performed += instance.OnInfo;
+                    @Info.canceled += instance.OnInfo;
+                }
             }
         }
-    }
-    public PlayerActions @Player => new PlayerActions(this);
-    private int m_ArrowKeysSchemeIndex = -1;
-    public InputControlScheme ArrowKeysScheme
-    {
-        get
+        public PlayerActions @Player => new PlayerActions(this);
+        private int m_ArrowKeysSchemeIndex = -1;
+        public InputControlScheme ArrowKeysScheme
         {
-            if (m_ArrowKeysSchemeIndex == -1) m_ArrowKeysSchemeIndex = asset.FindControlSchemeIndex("Arrow Keys");
-            return asset.controlSchemes[m_ArrowKeysSchemeIndex];
+            get
+            {
+                if (m_ArrowKeysSchemeIndex == -1) m_ArrowKeysSchemeIndex = asset.FindControlSchemeIndex("Arrow Keys");
+                return asset.controlSchemes[m_ArrowKeysSchemeIndex];
+            }
         }
-    }
-    public interface IPlayerActions
-    {
-        void OnMovement(InputAction.CallbackContext context);
-        void OnExit(InputAction.CallbackContext context);
-        void OnView(InputAction.CallbackContext context);
-        void OnInventory(InputAction.CallbackContext context);
-        void OnPickup(InputAction.CallbackContext context);
-        void OnDrop(InputAction.CallbackContext context);
-        void OnConfirm(InputAction.CallbackContext context);
-        void OnInfo(InputAction.CallbackContext context);
+        public interface IPlayerActions
+        {
+            void OnMovement(InputAction.CallbackContext context);
+            void OnExit(InputAction.CallbackContext context);
+            void OnView(InputAction.CallbackContext context);
+            void OnInventory(InputAction.CallbackContext context);
+            void OnPickup(InputAction.CallbackContext context);
+            void OnDrop(InputAction.CallbackContext context);
+            void OnConfirm(InputAction.CallbackContext context);
+            void OnInfo(InputAction.CallbackContext context);
+        }
     }
 }

@@ -1,12 +1,19 @@
-sealed class Dagger : Equippable {
-  public Dagger() {
-    EquipmentType = EquipmentType.Weapon;
-    PowerBonus = 2;
-  }
+namespace TheSleepyKoala.Entities
+{
+  sealed class Dagger : Equippable
+  {
+    public Dagger()
+    {
+      EquipmentType = EquipmentType.Weapon;
+      PowerBonus = 2;
+    }
 
-  private void OnValidate() {
-    if (gameObject.transform.parent) {
-      gameObject.transform.parent.GetComponent<Equipment>().Weapon = this;
+    private void OnValidate()
+    {
+      if (gameObject.transform.parent)
+      {
+        gameObject.transform.parent.GetComponent<Equipment>().Weapon = this;
+      }
     }
   }
 }
