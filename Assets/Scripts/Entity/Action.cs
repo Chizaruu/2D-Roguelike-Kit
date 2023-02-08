@@ -81,13 +81,13 @@ static public class Action {
         continue;
       }
 
-      if (actor.Inventory.Items.Count >= actor.Inventory.Capacity) {
+      if (actor.inventory.Items.Count >= actor.inventory.Capacity) {
         UIManager.instance.AddMessage($"Your inventory is full.", "#808080");
         return;
       }
 
       Item item = GameManager.instance.entities[i].GetComponent<Item>();
-      actor.Inventory.Add(item);
+      actor.inventory.Add(item);
 
       UIManager.instance.AddMessage($"You picked up the {item.name}!", "#FFFFFF");
       GameManager.instance.EndTurn();
@@ -95,11 +95,11 @@ static public class Action {
   }
 
   static public void DropAction(Actor actor, Item item) {
-    if (actor.Equipment.ItemIsEquipped(item)) {
-      actor.Equipment.ToggleEquip(item);
+    if (actor.equipment.ItemIsEquipped(item)) {
+      actor.equipment.ToggleEquip(item);
     }
 
-    actor.Inventory.Drop(item);
+    actor.inventory.Drop(item);
 
     UIManager.instance.ToggleDropMenu();
     GameManager.instance.EndTurn();
@@ -125,7 +125,7 @@ static public class Action {
       return;
     }
 
-    actor.Equipment.ToggleEquip(item);
+    actor.equipment.ToggleEquip(item);
 
     UIManager.instance.ToggleInventory();
     GameManager.instance.EndTurn();

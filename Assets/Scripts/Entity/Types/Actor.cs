@@ -2,23 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Actor : Entity {
-  [SerializeField] private bool isAlive = true; //read-only
+  [field: SerializeField] public bool isAlive { get; set; } = true;
   [SerializeField] private int fieldOfViewRange = 8;
-  [SerializeField] private List<Vector3Int> fieldOfView = new List<Vector3Int>();
-  [SerializeField] private Inventory inventory;
-  [SerializeField] private Equipment equipment;
-  [SerializeField] private AI aI;
-  [SerializeField] private Fighter fighter;
-  [SerializeField] private Level level;
+  [field: SerializeField] public List<Vector3Int> fieldOfView { get; private set; } = new List<Vector3Int>();
+  [field: SerializeField] public Inventory inventory { get; private set; }
+  [field: SerializeField] public Equipment equipment { get; private set; }
+  [field: SerializeField] public AI aI { get; set; }
+  [field: SerializeField] public Fighter fighter { get; private set; }
+  [field: SerializeField] public Level level { get; private set; }
   AdamMilVisibility algorithm;
-
-  public bool IsAlive { get => isAlive; set => isAlive = value; }
-  public List<Vector3Int> FieldOfView { get => fieldOfView; }
-  public Inventory Inventory { get => inventory; }
-  public Equipment Equipment { get => equipment; }
-  public AI AI { get => aI; set => aI = value; }
-  public Fighter Fighter { get => fighter; set => fighter = value; }
-  public Level Level { get => level; set => level = value; }
 
   private void OnValidate() {
     if (GetComponent<Inventory>()) {
@@ -78,58 +70,53 @@ public class Actor : Entity {
   public override EntityState SaveState() => new ActorState(
     name: name,
     blocksMovement: blocksMovement,
-    isAlive: IsAlive,
+    isAlive: isAlive,
     isVisible: MapManager.instance.visibleTiles.Contains(MapManager.instance.floorMap.WorldToCell(transform.position)),
     position: transform.position,
-    currentAI: aI != null ? AI.SaveState() : null,
+    currentAI: aI != null ? aI.SaveState() : null,
     fighterState: fighter != null ? fighter.SaveState() : null,
     levelState: level != null && GetComponent<Player>() ? level.SaveState() : null
   );
 
   public void LoadState(ActorState state) {
     transform.position = state.position;
-    isAlive = state.IsAlive;
+    isAlive = state.isAlive;
 
-    if (!IsAlive) {
+    if (!isAlive) {
       GameManager.instance.RemoveActor(this);
     }
 
     if (!state.isVisible) {
-      GetComponent<SpriteRenderer>().enabled = false;
+      spriteRenderer.enabled = false;
     }
 
-    if (state.CurrentAI != null) {
-      if (state.CurrentAI.Type == "HostileEnemy") {
+    if (state.currentAI != null) {
+      if (state.currentAI.Type == "HostileEnemy") {
         aI = GetComponent<HostileEnemy>();
-      } else if (state.CurrentAI.Type == "ConfusedEnemy") {
+      } else if (state.currentAI.Type == "ConfusedEnemy") {
         aI = gameObject.AddComponent<ConfusedEnemy>();
 
-        ConfusedState confusedState = state.CurrentAI as ConfusedState;
+        ConfusedState confusedState = state.currentAI as ConfusedState;
         ((ConfusedEnemy)aI).LoadState(confusedState);
       }
     }
 
-    if (state.FighterState != null) {
-      fighter.LoadState(state.FighterState);
+    if (state.fighterState != null) {
+      fighter.LoadState(state.fighterState);
     }
 
-    if (state.LevelState != null) {
-      level.LoadState(state.LevelState);
+    if (state.levelState != null) {
+      level.LoadState(state.levelState);
     }
   }
 }
 
 [System.Serializable]
 public class ActorState : EntityState {
-  [SerializeField] private bool isAlive;
-  [SerializeField] private AIState currentAI;
-  [SerializeField] private FighterState fighterState;
-  [SerializeField] private LevelState levelState;
-
-  public bool IsAlive { get => isAlive; set => isAlive = value; }
-  public AIState CurrentAI { get => currentAI; set => currentAI = value; }
-  public FighterState FighterState { get => fighterState; set => fighterState = value; }
-  public LevelState LevelState { get => levelState; set => levelState = value; }
+  [field: SerializeField] public bool isAlive { get; set; }
+  [field: SerializeField] public AIState currentAI { get; set; }
+  [field: SerializeField] public FighterState fighterState { get; set; }
+  [field: SerializeField] public LevelState levelState { get; set; }
 
   public ActorState(EntityType type = EntityType.Actor, string name = "", bool blocksMovement = false, bool isVisible = false, Vector3 position = new Vector3(),
    bool isAlive = true, AIState currentAI = null, FighterState fighterState = null, LevelState levelState = null) : base(type, name, blocksMovement, isVisible, position) {

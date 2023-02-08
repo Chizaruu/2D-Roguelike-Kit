@@ -128,11 +128,11 @@ sealed class ProcGen {
       Item starterWeapon = MapManager.instance.CreateEntity("Dagger", (Vector2Int)playerPos).GetComponent<Item>();
       Item starterArmor = MapManager.instance.CreateEntity("Leather Armor", (Vector2Int)playerPos).GetComponent<Item>();
 
-      playerActor.Inventory.Add(starterWeapon);
-      playerActor.Inventory.Add(starterArmor);
+      playerActor.inventory.Add(starterWeapon);
+      playerActor.inventory.Add(starterArmor);
 
-      playerActor.Equipment.EquipToSlot("Weapon", starterWeapon, false);
-      playerActor.Equipment.EquipToSlot("Armor", starterArmor, false);
+      playerActor.equipment.EquipToSlot("Weapon", starterWeapon, false);
+      playerActor.equipment.EquipToSlot("Armor", starterArmor, false);
     }
   }
 

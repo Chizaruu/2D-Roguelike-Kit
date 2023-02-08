@@ -47,8 +47,8 @@ public class GameManager : MonoBehaviour {
     if(actor.GetComponent<Player>()) {
       isPlayerTurn = true;
     } else {
-      if (actor.AI != null) {
-        actor.AI.RunAI();
+      if (actor.aI != null) {
+        actor.aI.RunAI();
       } else {
         Action.WaitAction();
       }
@@ -134,13 +134,13 @@ public class GameManager : MonoBehaviour {
   private float SetTime() => baseTime / actors.Count;
 
   public GameState SaveState() {
-    foreach (Item item in actors[0].Inventory.Items) {
+    foreach (Item item in actors[0].inventory.Items) {
       AddOrInsertEntity(item);
     }
 
     GameState gameState = new GameState(entities: entities.ConvertAll(x => x.SaveState()));
 
-    foreach (Item item in actors[0].Inventory.Items) {
+    foreach (Item item in actors[0].inventory.Items) {
       RemoveEntity(item);
     }
 

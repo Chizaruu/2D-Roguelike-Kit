@@ -253,9 +253,9 @@ public class UIManager : MonoBehaviour {
 
     char c = 'a';
 
-    for (int itemNum = 0; itemNum < actor.Inventory.Items.Count; itemNum++) {
+    for (int itemNum = 0; itemNum < actor.inventory.Items.Count; itemNum++) {
       GameObject menuContentChild = menuContent.transform.GetChild(itemNum).gameObject;
-      Item item = actor.Inventory.Items[itemNum];
+      Item item = actor.inventory.Items[itemNum];
       menuContentChild.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"({c++}) {item.name}";
       menuContentChild.GetComponent<Button>().onClick.AddListener(() => {
         if (menuContent == inventoryContent) {

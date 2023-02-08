@@ -6,7 +6,7 @@ public class Fireball : Consumable {
   [field: SerializeField] public int radius { get; private set; } = 3;
 
   public override bool Activate(Actor consumer) {
-    consumer.GetComponent<Inventory>().SelectedConsumable = this;
+    consumer.inventory.SelectedConsumable = this;
     consumer.GetComponent<Player>().ToggleTargetMode(true, radius);
     UIManager.instance.AddMessage($"Select a location to throw a fireball.", "#63FFFF");
     return false;
@@ -15,7 +15,7 @@ public class Fireball : Consumable {
   public override bool Cast(Actor consumer, List<Actor> targets) {
     foreach (Actor target in targets) {
       UIManager.instance.AddMessage($"The {target.name} is engulfed in a fiery explosion, taking {damage} damage!", "#FF0000");
-      target.GetComponent<Fighter>().Hp -= damage;
+      target.fighter.Hp -= damage;
     }
 
     Consume(consumer);

@@ -5,7 +5,7 @@ public class Lightning : Consumable {
   [field: SerializeField] public int maximumRange { get; private set; } = 5;
 
   public override bool Activate(Actor consumer) {
-    consumer.GetComponent<Inventory>().SelectedConsumable = this;
+    consumer.inventory.SelectedConsumable = this;
     consumer.GetComponent<Player>().ToggleTargetMode();
     UIManager.instance.AddMessage("Select a target to strike.", "#63FFFF");
     return false;
@@ -13,7 +13,7 @@ public class Lightning : Consumable {
 
   public override bool Cast(Actor consumer, Actor target) {
     UIManager.instance.AddMessage($"A lighting bolt strikes the {target.name} with a loud thunder, for {damage} damage!", "#FFFFFF");
-    target.GetComponent<Fighter>().Hp -= damage;
+    target.fighter.Hp -= damage;
     Consume(consumer);
     consumer.GetComponent<Player>().ToggleTargetMode();
     return true;

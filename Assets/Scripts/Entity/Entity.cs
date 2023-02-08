@@ -5,7 +5,8 @@ using UnityEngine;
 /// </summary>
 public class Entity : MonoBehaviour {
   [field: SerializeField] public bool blocksMovement { get; set; }
-
+  [field: SerializeField] public SpriteRenderer spriteRenderer { get; private set; }
+  
   public virtual void AddToGameManager() {
     if (GameManager.instance.entities.Contains(this))
     {

@@ -24,7 +24,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
   }
 
   void Controls.IPlayerActions.OnMovement(InputAction.CallbackContext context) {
-    if (context.started && GetComponent<Actor>().IsAlive) {
+    if (context.started && GetComponent<Actor>().isAlive) {
       if (targetMode && !moveKeyDown) {
         moveKeyDown = true;
         Move();
@@ -146,7 +146,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
 
   private void FixedUpdate() {
     if (!UIManager.instance.IsMenuOpen && !targetMode) {
-      if (GameManager.instance.isPlayerTurn && moveKeyDown && GetComponent<Actor>().IsAlive) {
+      if (GameManager.instance.isPlayerTurn && moveKeyDown && GetComponent<Actor>().isAlive) {
         Move();
       }
     }
@@ -166,7 +166,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
     if (targetMode) {
       Vector3Int targetGridPosition = MapManager.instance.floorMap.WorldToCell(futurePosition);
 
-      if (MapManager.instance.IsValidPosition(futurePosition) && GetComponent<Actor>().FieldOfView.Contains(targetGridPosition)) {
+      if (MapManager.instance.IsValidPosition(futurePosition) && GetComponent<Actor>().fieldOfView.Contains(targetGridPosition)) {
         targetObject.transform.position = futurePosition;
       }
     } else {
@@ -175,7 +175,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
   }
 
   private bool CanAct() {
-    if (targetMode || UIManager.instance.IsMenuOpen || !GetComponent<Actor>().IsAlive) {
+    if (targetMode || UIManager.instance.IsMenuOpen || !GetComponent<Actor>().isAlive) {
       return false;
     } else {
       return true;

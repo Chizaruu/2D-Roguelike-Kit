@@ -63,14 +63,14 @@ public class Fighter : MonoBehaviour {
   }
 
   public void Die() {
-    if (GetComponent<Actor>().IsAlive) {
+    if (GetComponent<Actor>().isAlive) {
       if (GetComponent<Player>()) {
         UIManager.instance.AddMessage("You died!", "#ff0000"); //Red
       } else {
         GameManager.instance.actors[0].GetComponent<Level>().AddExperience(GetComponent<Level>().XPGiven); //Give XP to player
         UIManager.instance.AddMessage($"{name} is dead!", "#ffa500"); //Light Orange
       }
-      GetComponent<Actor>().IsAlive = false;
+      GetComponent<Actor>().isAlive = false;
     }
 
     SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
