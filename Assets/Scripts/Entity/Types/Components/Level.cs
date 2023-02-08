@@ -1,82 +1,87 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Actor))]
-public class Level : MonoBehaviour {
-  [SerializeField] private int currentLevel = 1, currentXp, xpToNextLevel, levelUpBase = 200, levelUpFactor = 150, xpGiven;
+public class Level : MonoBehaviour
+{
+  [field: SerializeField] public LevelState State { get; set; }
+  [field: SerializeField] public int XpGiven { get; set; }
 
-  public int CurrentLevel { get => currentLevel; }
-  public int CurrentXp { get => currentXp; }
-  public int XpToNextLevel { get => xpToNextLevel; }
-  public int XPGiven { get => xpGiven; set => xpGiven = value; }
-
-  private void OnValidate() => xpToNextLevel = ExperienceToNextLevel();
-  private int ExperienceToNextLevel() => levelUpBase + currentLevel * levelUpFactor;
-  private bool RequiresLevelUp() => currentXp >= xpToNextLevel;
-
-  public void AddExperience(int xp) {
-    if (xp == 0 || levelUpBase == 0) return;
-
-    currentXp += xp;
-
-    UIManager.instance.AddMessage($"You gain {xp} experience points.", "#FFFFFF");
-
-    if (RequiresLevelUp()) {
-      UIManager.instance.ToggleLevelUpMenu(GetComponent<Actor>());
-      UIManager.instance.AddMessage($"You advance to level {currentLevel + 1}!", "#00FF00"); //Green
-    }
-  }
-
-  private void IncreaseLevel() {
-    currentXp -= xpToNextLevel;
-    currentLevel++;
-    xpToNextLevel = ExperienceToNextLevel();
-  }
-
-  public void IncreaseMaxHp(int amount = 20) {
+  public void IncreaseMaxHp(int amount = 10)
+  {
     GetComponent<Fighter>().MaxHp += amount;
     GetComponent<Fighter>().Hp += amount;
 
     UIManager.instance.AddMessage($"Your health improves!", "#00FF00"); //Green
-    IncreaseLevel();
+    State.LevelPoints--;
   }
 
-  public void IncreasePower(int amount = 1) {
-    GetComponent<Fighter>().BasePower += amount;
+  public void IncreasePower(int amount = 1)
+  {
+    GetComponent<Fighter>().State.BasePower += amount;
 
     UIManager.instance.AddMessage($"You feel stronger!", "#00FF00"); //Green
-    IncreaseLevel();
+    State.LevelPoints--;
   }
 
-  public void IncreaseDefense(int amount = 1) {
-    GetComponent<Fighter>().BaseDefense += amount;
+  public void IncreaseDefense(int amount = 1)
+  {
+    GetComponent<Fighter>().State.BaseDefense += amount;
 
     UIManager.instance.AddMessage($"Your movements are getting swifter!", "#00FF00"); //Green
-    IncreaseLevel();
-  }
-
-  public LevelState SaveState() => new LevelState(
-    currentLevel: currentLevel,
-    currentXp: currentXp,
-    xpToNextLevel: xpToNextLevel
-  );
-
-  public void LoadState(LevelState state) {
-    currentLevel = state.CurrentLevel;
-    currentXp = state.CurrentXp;
-    xpToNextLevel = state.XpToNextLevel;
+    State.LevelPoints--;
   }
 }
 
-public class LevelState {
-  [SerializeField] private int currentLevel = 1, currentXp, xpToNextLevel;
+[System.Serializable]
+public class LevelState
+{
+  [SerializeField] private int levelUpBase = 200, levelUpFactor = 150;
+  [field: SerializeField] public int CurrentLevel {get; set;} = 1;
+  [field: SerializeField] public int CurrentXp {get; set;}
+  [field: SerializeField] public int XpToNextLevel {get; private set;}
+  [field: SerializeField] public int LevelPoints {get; set;} = 0;
 
-  public int CurrentLevel { get => currentLevel; set => currentLevel = value; }
-  public int CurrentXp { get => currentXp; set => currentXp = value; }
-  public int XpToNextLevel { get => xpToNextLevel; set => xpToNextLevel = value; }
+  public LevelState() => XpToNextLevel = ExperienceToNextLevel();
 
-  public LevelState(int currentLevel, int currentXp, int xpToNextLevel) {
-    this.currentLevel = currentLevel;
-    this.currentXp = currentXp;
-    this.xpToNextLevel = xpToNextLevel;
+  public LevelState(int currentLevel, int currentXp, int xpToNextLevel, int levelPoints)
+  {
+    this.CurrentLevel = currentLevel;
+    this.CurrentXp = currentXp;
+    this.XpToNextLevel = xpToNextLevel;
+    this.LevelPoints = levelPoints;
+  }
+
+  public int ExperienceToNextLevel() => levelUpBase + CurrentLevel * levelUpFactor;
+  private bool RequiresLevelUp() => CurrentXp >= XpToNextLevel;
+
+  private void IncreaseLevel()
+  {
+    CurrentXp -= XpToNextLevel;
+    CurrentLevel++;
+    XpToNextLevel = ExperienceToNextLevel();
+    LevelPoints++;
+  }
+
+  public void AddExperience(int xp)
+  {
+    if (xp == 0 || levelUpBase == 0) return;
+
+    CurrentXp += xp;
+
+    UIManager.instance.AddMessage($"You gain {xp} experience points.", "#FFFFFF");
+
+    if (RequiresLevelUp())
+    {
+      IncreaseLevel();
+      UIManager.instance.AddMessage($"You advance to level {CurrentLevel}!", "#00FF00"); //Green
+    }
+  }
+
+  public void Load(LevelState savedState)
+  {
+    CurrentLevel = savedState.CurrentLevel;
+    CurrentXp = savedState.CurrentXp;
+    XpToNextLevel = savedState.XpToNextLevel;
+    LevelPoints = savedState.LevelPoints;
   }
 }

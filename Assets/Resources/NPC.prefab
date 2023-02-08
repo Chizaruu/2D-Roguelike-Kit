@@ -100,14 +100,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68dca875eddbc041b2f5d4fac65a464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blocksMovement: 1
-  isAlive: 1
+  <BlocksMovement>k__BackingField: 0
+  <SpriteRenderer>k__BackingField: {fileID: 5596009288642769278}
+  <isAlive>k__BackingField: 1
   fieldOfViewRange: 8
-  fieldOfView: []
-  inventory: {fileID: 0}
-  aI: {fileID: 9068088526719773172}
-  fighter: {fileID: 0}
-  level: {fileID: 3503943130817339647}
+  <fieldOfView>k__BackingField: []
+  <inventory>k__BackingField: {fileID: 0}
+  <equipment>k__BackingField: {fileID: 0}
+  <aI>k__BackingField: {fileID: 9068088526719773172}
+  <fighter>k__BackingField: {fileID: 0}
+  <level>k__BackingField: {fileID: 3503943130817339647}
 --- !u!114 &9068088526719773172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,6 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 1
   currentXp: 0
+  xpToNextLevel: 350
   levelUpBase: 200
   levelUpFactor: 150
   xpGiven: 0

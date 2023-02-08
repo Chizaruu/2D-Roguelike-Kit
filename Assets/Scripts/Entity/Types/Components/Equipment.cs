@@ -3,21 +3,18 @@ using UnityEngine;
 
 [RequireComponent(typeof(Actor))]
 public class Equipment : MonoBehaviour {
-  [SerializeField] private Equippable weapon;
-  [SerializeField] private Equippable armor;
-
-  public Equippable Weapon { get => weapon; set => weapon = value; }
-  public Equippable Armor { get => armor; set => armor = value; }
+  [field: SerializeField] public Equippable Weapon { get; set; }
+  [field: SerializeField] public Equippable Armor { get; set; }
 
   public int DefenseBonus() {
     int bonus = 0;
 
-    if (weapon is not null && weapon.DefenseBonus > 0) {
-      bonus += weapon.DefenseBonus;
+    if (Weapon is not null && Weapon.DefenseBonus > 0) {
+      bonus += Weapon.DefenseBonus;
     }
 
-    if (armor is not null && armor.DefenseBonus > 0) {
-      bonus += armor.DefenseBonus;
+    if (Armor is not null && Armor.DefenseBonus > 0) {
+      bonus += Armor.DefenseBonus;
     }
     return bonus;
   }
@@ -25,12 +22,12 @@ public class Equipment : MonoBehaviour {
   public int PowerBonus() {
     int bonus = 0;
 
-    if (weapon is not null && weapon.PowerBonus > 0) {
-      bonus += weapon.PowerBonus;
+    if (Weapon is not null && Weapon.PowerBonus > 0) {
+      bonus += Weapon.PowerBonus;
     }
 
-    if (armor is not null && armor.PowerBonus > 0) {
-      bonus += armor.PowerBonus;
+    if (Armor is not null && Armor.PowerBonus > 0) {
+      bonus += Armor.PowerBonus;
     }
 
     return bonus;
@@ -41,7 +38,7 @@ public class Equipment : MonoBehaviour {
       return false;
     }
 
-    return item.Equippable == weapon || item.Equippable == armor;
+    return item.Equippable == Weapon || item.Equippable == Armor;
   }
 
   public void UnequipMessage(string name) {
@@ -53,16 +50,16 @@ public class Equipment : MonoBehaviour {
   }
 
   public void EquipToSlot(string slot, Item item, bool addMessage) {
-    Equippable currentItem = slot == "Weapon" ? weapon : armor;
+    Equippable currentItem = slot == "Weapon" ? Weapon : Armor;
 
     if (currentItem is not null) {
       UnequipFromSlot(slot, addMessage);
     }
 
     if (slot == "Weapon") {
-      weapon = item.Equippable;
+      Weapon = item.Equippable;
     } else {
-      armor = item.Equippable;
+      Armor = item.Equippable;
     }
 
     if (addMessage) {
@@ -73,7 +70,7 @@ public class Equipment : MonoBehaviour {
   }
 
   public void UnequipFromSlot(string slot, bool addMessage) {
-    Equippable currentItem = slot == "Weapon" ? weapon : armor;
+    Equippable currentItem = slot == "Weapon" ? Weapon : Armor;
     currentItem.name = currentItem.name.Replace(" (E)", "");
 
     if (addMessage) {
@@ -81,9 +78,9 @@ public class Equipment : MonoBehaviour {
     }
 
     if (slot == "Weapon") {
-      weapon = null;
+      Weapon = null;
     } else {
-      armor = null;
+      Armor = null;
     }
   }
 

@@ -8,8 +8,8 @@ public class Consumable : MonoBehaviour {
   public virtual bool Cast(Actor actor, List<Actor> targets) => false;
 
   public void Consume(Actor consumer) {
-    if (consumer.GetComponent<Inventory>().SelectedConsumable == this) {
-      consumer.GetComponent<Inventory>().SelectedConsumable = null;
+    if (consumer.Inventory.SelectedConsumable == this) {
+      consumer.Inventory.SelectedConsumable = null;
     }
 
     consumer.Inventory.Items.Remove(GetComponent<Item>());

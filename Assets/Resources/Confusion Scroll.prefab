@@ -98,8 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad6efbf19bfae646bb1ddf80221b3ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blocksMovement: 0
+  <BlocksMovement>k__BackingField: 0
+  <SpriteRenderer>k__BackingField: {fileID: 3799066079496829687}
   consumable: {fileID: 2429755986844959524}
+  equippable: {fileID: 0}
 --- !u!114 &2429755986844959524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,4 +114,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05dcc5c5bdde40b48ac4aec4777ec1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfTurns: 10
+  <numberOfTurns>k__BackingField: 10

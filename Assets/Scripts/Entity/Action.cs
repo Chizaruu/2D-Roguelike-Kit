@@ -1,22 +1,25 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 static public class Action {
   static public void WaitAction() {
     GameManager.instance.EndTurn();
   }
 
-  static public void TakeStairsAction(Actor actor) {
+  static public void TakeStairsAction(Actor actor)
+  {
     Vector3Int pos = MapManager.instance.FloorMap.WorldToCell(actor.transform.position);
     string tileName = MapManager.instance.FloorMap.GetTile(pos).name;
 
-    if (tileName != MapManager.instance.UpStairsTile.name && tileName != MapManager.instance.DownStairsTile.name) {
+    if (tileName != MapManager.instance.UpStairsTile.name && tileName != MapManager.instance.DownStairsTile.name)
+    {
       UIManager.instance.AddMessage("There are no stairs here.", "#0da2ff");
       return;
     }
 
-    if (SaveManager.instance.CurrentFloor == 1 && tileName == MapManager.instance.UpStairsTile.name) {
+    if (SaveManager.instance.CurrentFloor == 1 && tileName == MapManager.instance.UpStairsTile.name)
+    {
       UIManager.instance.AddMessage("A mysterious force prevents you from going back.", "#0da2ff");
       return;
     }
@@ -24,9 +27,12 @@ static public class Action {
     SaveManager.instance.SaveGame();
     SaveManager.instance.CurrentFloor += tileName == MapManager.instance.UpStairsTile.name ? -1 : 1;
 
-    if (SaveManager.instance.Save.Scenes.Exists(x => x.FloorNumber == SaveManager.instance.CurrentFloor)) {
+    if (SaveManager.instance.Save.Scenes.Exists(x => x.FloorNumber == SaveManager.instance.CurrentFloor))
+    {
       SaveManager.instance.LoadScene(false);
-    } else {
+    } 
+    else 
+    {
       GameManager.instance.Reset(false);
       MapManager.instance.GenerateDungeon();
     }
@@ -54,7 +60,7 @@ static public class Action {
   }
 
   static public void MeleeAction(Actor actor, Actor target) {
-    int damage = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
+    int damage = actor.Fighter.Power() - target.Fighter.Defense();
 
     string attackDesc = $"{actor.name} attacks {target.name}";
 
@@ -68,30 +74,36 @@ static public class Action {
 
     if (damage > 0) {
       UIManager.instance.AddMessage($"{attackDesc} for {damage} hit points.", colorHex);
-      target.GetComponent<Fighter>().Hp -= damage;
+      target.Fighter.Hp -= damage;
     } else {
       UIManager.instance.AddMessage($"{attackDesc} but does no damage.", colorHex);
     }
+
     GameManager.instance.EndTurn();
   }
 
-  static public void PickupAction(Actor actor) {
-    for (int i = 0; i < GameManager.instance.Entities.Count; i++) {
-      if (GameManager.instance.Entities[i].GetComponent<Actor>() || actor.transform.position != GameManager.instance.Entities[i].transform.position) {
-        continue;
-      }
+  static public void PickupAction(Actor actor)
+  {
+    Item item = GameManager.instance.Entities
+      .Where(x => x.transform.position == actor.transform.position && x.GetComponent<Item>())
+      .Select(x => x.GetComponent<Item>())
+      .FirstOrDefault();
 
-      if (actor.Inventory.Items.Count >= actor.Inventory.Capacity) {
-        UIManager.instance.AddMessage($"Your inventory is full.", "#808080");
-        return;
-      }
-
-      Item item = GameManager.instance.Entities[i].GetComponent<Item>();
-      actor.Inventory.Add(item);
-
-      UIManager.instance.AddMessage($"You picked up the {item.name}!", "#FFFFFF");
-      GameManager.instance.EndTurn();
+    if (item is null)
+    {
+      return;
     }
+
+    if (actor.Inventory.Items.Count >= actor.Inventory.Capacity)
+    {
+      UIManager.instance.AddMessage($"Your inventory is full.", "#808080");
+      return;
+    }
+
+    actor.Inventory.Add(item);
+
+    UIManager.instance.AddMessage($"You picked up the {item.name}!", "#FFFFFF");
+    GameManager.instance.EndTurn();
   }
 
   static public void DropAction(Actor actor, Item item) {

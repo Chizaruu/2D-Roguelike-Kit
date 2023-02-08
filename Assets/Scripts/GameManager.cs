@@ -10,19 +10,15 @@ public class GameManager : MonoBehaviour {
   [Header("Time")]
   [SerializeField] private float baseTime = 0.075f;
   [SerializeField] private float delayTime; //Read-only
-  private Queue<Actor> actorQueue;
+  [field: SerializeField] public bool IsPlayerTurn { get; set; } = true;
 
-  [Header("Entities")]
-  [SerializeField] private bool isPlayerTurn = true; //Read-only
-  [SerializeField] private List<Entity> entities;
-  [SerializeField] private List<Actor> actors;
+  [field: Header("Entities & Actors")]
+  [field: SerializeField] public List<Entity> Entities { get; private set; }
+  [field: SerializeField] public List<Actor> Actors { get; private set; }
+  private Queue<Actor> actorQueue = new Queue<Actor>();
 
-  [Header("Death")]
-  [SerializeField] private Sprite deadSprite;
-  public bool IsPlayerTurn { get => isPlayerTurn; }
-  public List<Entity> Entities { get => entities; }
-  public List<Actor> Actors { get => actors; }
-  public Sprite DeadSprite { get => deadSprite; }
+  [field: Header("Death")]
+  [field: SerializeField] public Sprite DeadSprite { get; private set; }
 
   private void Awake() {
     if (instance == null) {
@@ -39,16 +35,17 @@ public class GameManager : MonoBehaviour {
     if (sceneState is not null) {
       LoadState(sceneState.GameState, true);
     } else {
-      actorQueue = new Queue<Actor>();
-      entities = new List<Entity>();
-      actors = new List<Actor>();
+      Entities = new List<Entity>();
+      Actors = new List<Actor>();
     }
+
+    SceneManager.sceneLoaded -= OnSceneLoaded;
   }
 
   private void StartTurn() {
     Actor actor = actorQueue.Peek();
     if(actor.GetComponent<Player>()) {
-      isPlayerTurn = true;
+      IsPlayerTurn = true;
     } else {
       if (actor.AI != null) {
         actor.AI.RunAI();
@@ -62,7 +59,7 @@ public class GameManager : MonoBehaviour {
     Actor actor = actorQueue.Dequeue();
 
     if (actor.GetComponent<Player>()) {
-      isPlayerTurn = false;
+      IsPlayerTurn = false;
     }
 
     actorQueue.Enqueue(actor);
@@ -75,33 +72,39 @@ public class GameManager : MonoBehaviour {
     StartTurn();
   }
 
-  public void AddEntity(Entity entity) {
-    if (!entity.gameObject.activeSelf) {
+  public void AddOrInsertEntity(Entity entity, int index = -1)
+  {
+    if (!entity.gameObject.activeSelf)
+    {
       entity.gameObject.SetActive(true);
     }
-    entities.Add(entity);
-  }
 
-  public void InsertEntity(Entity entity, int index) {
-    if (!entity.gameObject.activeSelf) {
-      entity.gameObject.SetActive(true);
+    if (index < 0)
+    {
+      Entities.Add(entity);
     }
-    entities.Insert(index, entity);
+    else
+    {
+      Entities.Insert(index, entity);
+    }
   }
 
   public void RemoveEntity(Entity entity) {
     entity.gameObject.SetActive(false);
-    entities.Remove(entity);
+    Entities.Remove(entity);
   }
 
-  public void AddActor(Actor actor) {
-    actors.Add(actor);
-    delayTime = SetTime();
-    actorQueue.Enqueue(actor);
-  }
+  public void AddOrInsertActor(Actor actor, int index = -1)
+  {
+    if (index < 0)
+    {
+      Actors.Add(actor);
+    }
+    else
+    {
+      Actors.Insert(index, actor);
+    }
 
-  public void InsertActor(Actor actor, int index) {
-    actors.Insert(index, actor);
     delayTime = SetTime();
     actorQueue.Enqueue(actor);
   }
@@ -110,17 +113,17 @@ public class GameManager : MonoBehaviour {
     if(actor.GetComponent<Player>()) {
       return;
     }
-    actors.Remove(actor);
+    Actors.Remove(actor);
     delayTime = SetTime();
     actorQueue = new Queue<Actor>(actorQueue.Where(x => x != actor));
   }
 
   public void RefreshPlayer() {
-    actors[0].UpdateFieldOfView();
+    Actors[0].UpdateFieldOfView();
   }
 
   public Actor GetActorAtLocation(Vector3 location) {
-    foreach (Actor actor in actors) {
+    foreach (Actor actor in Actors) {
       if (actor.BlocksMovement && actor.transform.position == location) {
         return actor;
       }
@@ -128,16 +131,16 @@ public class GameManager : MonoBehaviour {
     return null;
   }
 
-  private float SetTime() => baseTime / actors.Count;
+  private float SetTime() => baseTime / Actors.Count;
 
   public GameState SaveState() {
-    foreach (Item item in actors[0].Inventory.Items) {
-      AddEntity(item);
+    foreach (Item item in Actors[0].Inventory.Items) {
+      AddOrInsertEntity(item);
     }
 
-    GameState gameState = new GameState(entities: entities.ConvertAll(x => x.SaveState()));
+    GameState gameState = new GameState(entities: Entities.ConvertAll(x => x.SaveState()));
 
-    foreach (Item item in actors[0].Inventory.Items) {
+    foreach (Item item in Actors[0].Inventory.Items) {
       RemoveEntity(item);
     }
 
@@ -145,10 +148,10 @@ public class GameManager : MonoBehaviour {
   }
 
   public void LoadState(GameState state, bool canRemovePlayer) {
-    isPlayerTurn = false; //Prevents player from moving during load
+    IsPlayerTurn = false; //Prevents player from moving during load
 
     Reset(canRemovePlayer);
-    StartCoroutine(LoadEntityStates(state.Entities, canRemovePlayer));
+    StartCoroutine(LoadEntityStates(state.entityStates, canRemovePlayer));
   }
 
   private IEnumerator LoadEntityStates(List<EntityState> entityStates, bool canPlacePlayer) {
@@ -163,7 +166,7 @@ public class GameManager : MonoBehaviour {
           entityStates[entityState].Name.Substring(entityStates[entityState].Name.LastIndexOf(' ') + 1) : entityStates[entityState].Name;
 
         if (entityName == "Player" && !canPlacePlayer) {
-          actors[0].transform.position = entityStates[entityState].Position;
+          Actors[0].transform.position = entityStates[entityState].Position;
           RefreshPlayer();
           entityState++;
           continue;
@@ -190,26 +193,28 @@ public class GameManager : MonoBehaviour {
 
       entityState++;
     }
-    isPlayerTurn = true; //Allows player to move after load
+    IsPlayerTurn = true; //Allows player to move after load
   }
 
   public void Reset(bool canRemovePlayer) {
-    if (entities.Count > 0) {
-      foreach (Entity entity in entities) {
-        if (!canRemovePlayer && entity.GetComponent<Player>()) {
+    if (Entities.Count > 0) {
+      for (int i = 0; i < Entities.Count; i++)
+      {
+        if (!canRemovePlayer && Entities[i].GetComponent<Player>())
+        {
           continue;
         }
 
-        Destroy(entity.gameObject);
+        Destroy(Entities[i].gameObject);
       }
 
       if (canRemovePlayer) {
-        entities.Clear();
-        actors.Clear();
+        Entities.Clear();
+        Actors.Clear();
         actorQueue.Clear();
       } else {
-        entities.RemoveRange(1, entities.Count - 1);
-        actors.RemoveRange(1, actors.Count - 1);
+        Entities.RemoveAll(x => x.GetComponent<Player>() == null);
+        Actors.RemoveAll(x => x.GetComponent<Player>() == null);
         actorQueue = new Queue<Actor>(actorQueue.Where(x => x.GetComponent<Player>()));
       }
     }
@@ -218,11 +223,10 @@ public class GameManager : MonoBehaviour {
 
 [System.Serializable]
 public class GameState {
-  [SerializeField] private List<EntityState> entities;
+  [field: SerializeField] public List<EntityState> entityStates { get; set; }
 
-  public List<EntityState> Entities { get => entities; set => entities = value; }
-
-  public GameState(List<EntityState> entities) {
-    this.entities = entities;
+  public GameState(List<EntityState> entities)
+  {
+    this.entityStates = entities;
   }
 }

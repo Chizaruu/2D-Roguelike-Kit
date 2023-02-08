@@ -4,22 +4,34 @@ using UnityEngine;
 /// A generic class to represent players, enemies, items, etc.
 /// </summary>
 public class Entity : MonoBehaviour {
-  [SerializeField] private bool blocksMovement;
-
-  public bool BlocksMovement { get => blocksMovement; set => blocksMovement = value; }
+  [field: SerializeField] public bool BlocksMovement { get; set; }
+  [field: SerializeField] public SpriteRenderer SpriteRenderer { get; private set; }
 
   public virtual void AddToGameManager() {
+    if (GameManager.instance.Entities.Contains(this))
+    {
+      return;
+    }
+
     if (GetComponent<Player>()) {
-      GameManager.instance.InsertEntity(this, 0);
+      GameManager.instance.AddOrInsertEntity(this, 0);
     } else {
-      GameManager.instance.AddEntity(this);
+      GameManager.instance.AddOrInsertEntity(this);
     }
   }
 
   public void Move(Vector2 direction) {
-    if (MapManager.instance.IsValidPosition(transform.position + (Vector3)direction)) {
-      transform.position += (Vector3)direction;
+    if (!MapManager.instance.IsValidPosition(transform.position + (Vector3)direction))
+    {
+      return;
     }
+
+    if (GameManager.instance.GetActorAtLocation(transform.position + (Vector3)direction))
+    {
+      return;
+    }
+
+    transform.position += (Vector3)direction;
   }
 
   public virtual EntityState SaveState() => new EntityState();
@@ -32,22 +44,17 @@ public class EntityState {
     Item,
     Other
   }
-  [SerializeField] private EntityType type;
-  [SerializeField] private string name;
-  [SerializeField] private bool blocksMovement, isVisible;
-  [SerializeField] private Vector3 position;
-
-  public EntityType Type { get => type; set => type = value; }
-  public string Name { get => name; set => name = value; }
-  public bool BlocksMovement { get => blocksMovement; set => blocksMovement = value; }
-  public bool IsVisible { get => isVisible; set => isVisible = value; }
-  public Vector3 Position { get => position; set => position = value; }
+  [field: SerializeField] public EntityType Type { get; set; }
+  [field: SerializeField] public string Name { get; set; }
+  [field: SerializeField] public bool BlocksMovement { get; set; }
+  [field: SerializeField] public bool IsVisible { get; set; }
+  [field: SerializeField] public Vector3 Position { get; set; }
 
   public EntityState(EntityType type = EntityType.Other, string name = "", bool blocksMovement = false, bool isVisible = false, Vector3 position = new Vector3()) {
-    this.type = type;
-    this.name = name;
-    this.blocksMovement = blocksMovement;
-    this.isVisible = isVisible;
-    this.position = position;
+    this.Type = type;
+    this.Name = name;
+    this.BlocksMovement = blocksMovement;
+    this.IsVisible = isVisible;
+    this.Position = position;
   }
 }

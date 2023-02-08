@@ -98,9 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad6efbf19bfae646bb1ddf80221b3ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blocksMovement: 0
-  consumable: {fileID: 0}
-  equippable: {fileID: 337276904647084753}
+  <BlocksMovement>k__BackingField: 0
+  <SpriteRenderer>k__BackingField: {fileID: 3799066079496829687}
+  <Consumable>k__BackingField: {fileID: 0}
+  <Equippable>k__BackingField: {fileID: 337276904647084753}
 --- !u!114 &337276904647084753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,6 +114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4118e0f05dece6a4cbd57ff0d2f88064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equipmentType: 0
-  powerBonus: 4
-  defenseBonus: 0
+  <EquipmentType>k__BackingField: 0
+  <PowerBonus>k__BackingField: 4
+  <DefenseBonus>k__BackingField: 0
