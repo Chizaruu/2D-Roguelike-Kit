@@ -146,7 +146,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
 
   private void FixedUpdate() {
     if (!UIManager.instance.IsMenuOpen && !targetMode) {
-      if (GameManager.instance.IsPlayerTurn && moveKeyDown && GetComponent<Actor>().IsAlive) {
+      if (GameManager.instance.isPlayerTurn && moveKeyDown && GetComponent<Actor>().IsAlive) {
         Move();
       }
     }
@@ -205,7 +205,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
     Bounds targetBounds = new Bounds(targetPosition, Vector3.one * radius * 2);
     List<Actor> targets = new List<Actor>();
 
-    foreach (Actor target in GameManager.instance.Actors) {
+    foreach (Actor target in GameManager.instance.actors) {
       if (targetBounds.Contains(target.transform.position)) {
         targets.Add(target);
       }

@@ -598,11 +598,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseTime: 0.075
   delayTime: 0
-  isPlayerTurn: 1
-  actorNum: 0
-  entities: []
-  actors: []
-  deadSprite: {fileID: 1552831975, guid: d5e9a53ff63e1d04bbc1df4c7c3666be, type: 3}
+  <isPlayerTurn>k__BackingField: 1
+  <entities>k__BackingField: []
+  <actors>k__BackingField: []
+  <deadSprite>k__BackingField: {fileID: 1552831975, guid: d5e9a53ff63e1d04bbc1df4c7c3666be, type: 3}
 --- !u!4 &1312308580
 Transform:
   m_ObjectHideFlags: 0
@@ -653,8 +652,6 @@ MonoBehaviour:
   roomMaxSize: 10
   roomMinSize: 6
   maxRooms: 30
-  maxMonstersPerRoom: 2
-  maxItemsPerRoom: 2
   floorTile: {fileID: 11400000, guid: 7177455921166184dad8f6d22574b61c, type: 2}
   wallTile: {fileID: 11400000, guid: 9ffb6ecd0a15af0478ba6c4991916d37, type: 2}
   fogTile: {fileID: 11400000, guid: 78d2d543bb21d3c4f9df75d4706dfd92, type: 2}

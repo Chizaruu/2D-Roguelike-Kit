@@ -57,9 +57,9 @@ public class Actor : Entity {
     base.AddToGameManager();
 
     if (GetComponent<Player>()) {
-      GameManager.instance.InsertActor(this, 0);
+      GameManager.instance.AddOrInsertActor(this, 0);
     } else {
-      GameManager.instance.AddActor(this);
+      GameManager.instance.AddOrInsertActor(this);
     }
   }
 

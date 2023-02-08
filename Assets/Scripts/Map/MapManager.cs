@@ -119,7 +119,7 @@ public class MapManager : MonoBehaviour {
   }
 
   public void SetEntitiesVisibilities() {
-    foreach (Entity entity in GameManager.instance.Entities) {
+    foreach (Entity entity in GameManager.instance.entities) {
       if (entity.GetComponent<Player>()) {
         continue;
       }

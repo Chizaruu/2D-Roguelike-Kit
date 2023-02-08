@@ -76,8 +76,8 @@ static public class Action {
   }
 
   static public void PickupAction(Actor actor) {
-    for (int i = 0; i < GameManager.instance.Entities.Count; i++) {
-      if (GameManager.instance.Entities[i].GetComponent<Actor>() || actor.transform.position != GameManager.instance.Entities[i].transform.position) {
+    for (int i = 0; i < GameManager.instance.entities.Count; i++) {
+      if (GameManager.instance.entities[i].GetComponent<Actor>() || actor.transform.position != GameManager.instance.entities[i].transform.position) {
         continue;
       }
 
@@ -86,7 +86,7 @@ static public class Action {
         return;
       }
 
-      Item item = GameManager.instance.Entities[i].GetComponent<Item>();
+      Item item = GameManager.instance.entities[i].GetComponent<Item>();
       actor.Inventory.Add(item);
 
       UIManager.instance.AddMessage($"You picked up the {item.name}!", "#FFFFFF");

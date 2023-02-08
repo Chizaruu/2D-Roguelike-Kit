@@ -120,7 +120,7 @@ sealed class ProcGen {
     MapManager.instance.FloorMap.SetTile(playerPos, MapManager.instance.UpStairsTile);
 
     if (!isNewGame) {
-      GameManager.instance.Actors[0].transform.position = new Vector3(playerPos.x + 0.5f, playerPos.y + 0.5f, 0);
+      GameManager.instance.actors[0].transform.position = new Vector3(playerPos.x + 0.5f, playerPos.y + 0.5f, 0);
     } else {
       GameObject player = MapManager.instance.CreateEntity("Player", (Vector2Int)playerPos);
       Actor playerActor = player.GetComponent<Actor>();

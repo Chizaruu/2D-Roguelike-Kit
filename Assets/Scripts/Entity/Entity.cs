@@ -10,9 +10,9 @@ public class Entity : MonoBehaviour {
 
   public virtual void AddToGameManager() {
     if (GetComponent<Player>()) {
-      GameManager.instance.InsertEntity(this, 0);
+      GameManager.instance.AddOrInsertEntity(this, 0);
     } else {
-      GameManager.instance.AddEntity(this);
+      GameManager.instance.AddOrInsertEntity(this);
     }
   }
 

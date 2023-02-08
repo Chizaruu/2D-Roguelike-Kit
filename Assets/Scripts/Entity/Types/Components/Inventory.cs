@@ -19,7 +19,7 @@ public class Inventory : MonoBehaviour {
   public void Drop(Item item) {
     items.Remove(item);
     item.transform.SetParent(null);
-    GameManager.instance.AddEntity(item);
+    GameManager.instance.AddOrInsertEntity(item);
     UIManager.instance.AddMessage($"You dropped the {item.name}.", "#FF0000");
   }
 }

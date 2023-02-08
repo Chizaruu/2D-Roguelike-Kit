@@ -12,7 +12,7 @@ public class HostileEnemy : AI {
 
   public override void RunAI() {
     if (!fighter.Target) {
-      fighter.Target = GameManager.instance.Actors[0];
+      fighter.Target = GameManager.instance.actors[0];
     } else if (fighter.Target && !fighter.Target.IsAlive) {
       fighter.Target = null;
     }
