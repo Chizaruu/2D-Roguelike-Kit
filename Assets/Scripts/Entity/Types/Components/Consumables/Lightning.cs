@@ -1,11 +1,8 @@
 using UnityEngine;
 
 public class Lightning : Consumable {
-  [SerializeField] private int damage = 20;
-  [SerializeField] private int maximumRange = 5;
-
-  public int Damage { get => damage; }
-  public int MaximumRange { get => maximumRange; }
+  [field: SerializeField] public int damage { get; private set; } = 20;
+  [field: SerializeField] public int maximumRange { get; private set; } = 5;
 
   public override bool Activate(Actor consumer) {
     consumer.GetComponent<Inventory>().SelectedConsumable = this;

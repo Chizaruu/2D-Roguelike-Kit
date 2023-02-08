@@ -187,11 +187,13 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
 
     if (target == null) {
       UIManager.instance.AddMessage("You must select an enemy to target.", "#FFFFFF");
+      ToggleTargetMode();
       return null;
     }
 
     if (target == GetComponent<Actor>()) {
       UIManager.instance.AddMessage("You can't target yourself!", "#FFFFFF");
+      ToggleTargetMode();
       return null;
     }
 
@@ -213,6 +215,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
 
     if (targets.Count == 0) {
       UIManager.instance.AddMessage("There are no targets in the radius.", "#FFFFFF");
+      ToggleTargetMode();
       return null;
     }
 
