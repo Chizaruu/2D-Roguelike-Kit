@@ -24,6 +24,7 @@ static public class Action {
       return;
     }
 
+    SaveManager.instance.SaveGame();
     SaveManager.instance.CurrentFloor += tileName == MapManager.instance.UpStairsTile.name ? -1 : 1;
 
     if (SaveManager.instance.Save.Scenes.Exists(x => x.FloorNumber == SaveManager.instance.CurrentFloor))
@@ -38,7 +39,6 @@ static public class Action {
 
     UIManager.instance.AddMessage("You take the stairs.", "#0da2ff");
     UIManager.instance.SetDungeonFloorText(SaveManager.instance.CurrentFloor);
-    SaveManager.instance.SaveGame();
   }
 
   static public bool BumpAction(Actor actor, Vector2 direction) {
