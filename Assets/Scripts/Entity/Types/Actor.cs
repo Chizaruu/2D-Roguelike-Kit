@@ -77,7 +77,7 @@ public class Actor : Entity {
 
   public override EntityState SaveState() => new ActorState(
     name: name,
-    blocksMovement: BlocksMovement,
+    blocksMovement: blocksMovement,
     isAlive: IsAlive,
     isVisible: MapManager.instance.visibleTiles.Contains(MapManager.instance.floorMap.WorldToCell(transform.position)),
     position: transform.position,
@@ -87,14 +87,14 @@ public class Actor : Entity {
   );
 
   public void LoadState(ActorState state) {
-    transform.position = state.Position;
+    transform.position = state.position;
     isAlive = state.IsAlive;
 
     if (!IsAlive) {
       GameManager.instance.RemoveActor(this);
     }
 
-    if (!state.IsVisible) {
+    if (!state.isVisible) {
       GetComponent<SpriteRenderer>().enabled = false;
     }
 

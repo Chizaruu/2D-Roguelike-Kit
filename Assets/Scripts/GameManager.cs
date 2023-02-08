@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour {
 
   public Actor GetActorAtLocation(Vector3 location) {
     foreach (Actor actor in actors) {
-      if (actor.BlocksMovement && actor.transform.position == location) {
+      if (actor.blocksMovement && actor.transform.position == location) {
         return actor;
       }
     }
@@ -159,34 +159,34 @@ public class GameManager : MonoBehaviour {
     while (entityState < entityStates.Count) {
       yield return new WaitForEndOfFrame();
 
-      if (entityStates[entityState].Type == EntityState.EntityType.Actor) {
+      if (entityStates[entityState].type == EntityState.EntityType.Actor) {
         ActorState actorState = entityStates[entityState] as ActorState;
 
-        string entityName = entityStates[entityState].Name.Contains("Remains of") ?
-          entityStates[entityState].Name.Substring(entityStates[entityState].Name.LastIndexOf(' ') + 1) : entityStates[entityState].Name;
+        string entityName = entityStates[entityState].name.Contains("Remains of") ?
+          entityStates[entityState].name.Substring(entityStates[entityState].name.LastIndexOf(' ') + 1) : entityStates[entityState].name;
 
         if (entityName == "Player" && !canPlacePlayer) {
-          actors[0].transform.position = entityStates[entityState].Position;
+          actors[0].transform.position = entityStates[entityState].position;
           RefreshPlayer();
           entityState++;
           continue;
         }
 
-        Actor actor = MapManager.instance.CreateEntity(entityName, actorState.Position).GetComponent<Actor>();
+        Actor actor = MapManager.instance.CreateEntity(entityName, actorState.position).GetComponent<Actor>();
 
         actor.LoadState(actorState);
-      } else if (entityStates[entityState].Type == EntityState.EntityType.Item) {
+      } else if (entityStates[entityState].type == EntityState.EntityType.Item) {
         ItemState itemState = entityStates[entityState] as ItemState;
 
-        string entityName = entityStates[entityState].Name.Contains("(E)") ?
-          entityStates[entityState].Name.Replace(" (E)", "") : entityStates[entityState].Name;
+        string entityName = entityStates[entityState].name.Contains("(E)") ?
+          entityStates[entityState].name.Replace(" (E)", "") : entityStates[entityState].name;
 
         if (itemState.Parent == "Player" && !canPlacePlayer) {
           entityState++;
           continue;
         }
 
-        Item item = MapManager.instance.CreateEntity(entityName, itemState.Position).GetComponent<Item>();
+        Item item = MapManager.instance.CreateEntity(entityName, itemState.position).GetComponent<Item>();
 
         item.LoadState(itemState);
       }

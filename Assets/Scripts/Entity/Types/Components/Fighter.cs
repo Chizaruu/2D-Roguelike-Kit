@@ -79,7 +79,7 @@ public class Fighter : MonoBehaviour {
     spriteRenderer.sortingOrder = 0;
 
     name = $"Remains of {name}";
-    GetComponent<Actor>().BlocksMovement = false;
+    GetComponent<Actor>().blocksMovement = false;
     if (!GetComponent<Player>()) {
       GameManager.instance.RemoveActor(this.GetComponent<Actor>());
     }

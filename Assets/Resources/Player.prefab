@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68dca875eddbc041b2f5d4fac65a464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blocksMovement: 1
+  <blocksMovement>k__BackingField: 1
   isAlive: 1
   fieldOfViewRange: 8
   fieldOfView: []

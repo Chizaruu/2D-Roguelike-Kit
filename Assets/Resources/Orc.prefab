@@ -102,12 +102,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68dca875eddbc041b2f5d4fac65a464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blocksMovement: 1
+  <blocksMovement>k__BackingField: 1
   isAlive: 1
   fieldOfViewRange: 8
   fieldOfView: []
   inventory: {fileID: 0}
-  equipment: {fileID: 0}
+  equipment: {fileID: 4512926728142353472}
   aI: {fileID: 2435539870580237300}
   fighter: {fileID: 7760322755128577293}
   level: {fileID: 4847947800509122718}
