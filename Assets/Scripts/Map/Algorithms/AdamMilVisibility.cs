@@ -208,7 +208,7 @@ sealed class AdamMilVisibility : Visibility {
       case 6: nx += y; ny += x; break;
       case 7: nx += x; ny += y; break;
     }
-    return MapManager.instance.obstacleMap.HasTile(new Vector3Int((int)nx, (int)ny, 0));
+    return MapManager.instance.ObstacleMap.HasTile(new Vector3Int((int)nx, (int)ny, 0));
   }
 
   void SetVisible(uint x, uint y, uint octant, Vector3Int origin, List<Vector3Int> fieldOfView) {

@@ -7,30 +7,30 @@ using UnityEngine.Tilemaps;
 public class MapManager : MonoBehaviour {
   public static MapManager instance;
 
-  [field: SerializeField] public MapState state { get; set; }
+  [field: SerializeField] public MapState State { get; set; }
 
   [field: Header("Map Settings")]
-  [field: SerializeField] public int width { get; private set;} = 80;
-  [field: SerializeField] public int height { get; private set;} = 45;
+  [field: SerializeField] public int Width { get; private set;} = 80;
+  [field: SerializeField] public int Height { get; private set;} = 45;
   [SerializeField] private int roomMaxSize = 10;
   [SerializeField] private int roomMinSize = 6;
   [SerializeField] private int maxRooms = 30;
 
   [field: Header("Tiles")]
-  [field: SerializeField] public TileBase floorTile { get; private set;}
-  [field: SerializeField] public TileBase wallTile { get; private set;}
-  [field: SerializeField] public TileBase fogTile { get; private set;}
-  [field: SerializeField] public TileBase upStairsTile { get; private set;}
-  [field: SerializeField] public TileBase downStairsTile { get; private set;}
+  [field: SerializeField] public TileBase FloorTile { get; private set;}
+  [field: SerializeField] public TileBase WallTile { get; private set;}
+  [field: SerializeField] public TileBase FogTile { get; private set;}
+  [field: SerializeField] public TileBase UpStairsTile { get; private set;}
+  [field: SerializeField] public TileBase DownStairsTile { get; private set;}
 
   [field: Header("Tilemaps")]
-  [field: SerializeField] public Tilemap floorMap { get; private set; }
-  [field: SerializeField] public Tilemap obstacleMap { get; private set; }
-  [field: SerializeField] public Tilemap fogMap { get; private set; }
+  [field: SerializeField] public Tilemap FloorMap { get; private set; }
+  [field: SerializeField] public Tilemap ObstacleMap { get; private set; }
+  [field: SerializeField] public Tilemap FogMap { get; private set; }
 
   [field: Header("Features")]
-  [field: SerializeField] public List<Vector3Int> visibleTiles { get; private set; }
-  public Dictionary<Vector2Int, Node> nodes { get; set; } = new Dictionary<Vector2Int, Node>();
+  [field: SerializeField] public List<Vector3Int> VisibleTiles { get; private set; }
+  public Dictionary<Vector2Int, Node> Nodes { get; set; } = new Dictionary<Vector2Int, Node>();
 
   private void Awake() {
     if (instance == null) {
@@ -66,15 +66,15 @@ public class MapManager : MonoBehaviour {
     }
     else
     {
-      state = new MapState();
-      visibleTiles = new List<Vector3Int>();
+      State = new MapState();
+      VisibleTiles = new List<Vector3Int>();
     }
 
     ProcGen procGen = new ProcGen();
-    procGen.GenerateDungeon(width, height, roomMaxSize, roomMinSize, maxRooms, state.rooms, isNewGame);
+    procGen.GenerateDungeon(Width, Height, roomMaxSize, roomMinSize, maxRooms, State.rooms, isNewGame);
 
-    AddTileMapToDictionary(floorMap);
-    AddTileMapToDictionary(obstacleMap);
+    AddTileMapToDictionary(FloorMap);
+    AddTileMapToDictionary(ObstacleMap);
     SetupFogMap();
 
     if (!isNewGame) {
@@ -83,7 +83,7 @@ public class MapManager : MonoBehaviour {
   }
 
   ///<summary>Return True if x and y are inside of the bounds of this map. </summary>
-  public bool InBounds(int x, int y) => 0 <= x && x < width && 0 <= y && y < height;
+  public bool InBounds(int x, int y) => 0 <= x && x < Width && 0 <= y && y < Height;
 
   public GameObject CreateEntity(string entity, Vector2 position) {
     GameObject entityObject = Instantiate(Resources.Load<GameObject>($"{entity}"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity);
@@ -92,21 +92,21 @@ public class MapManager : MonoBehaviour {
   }
 
   public void UpdateFogMap(List<Vector3Int> playerFOV) {
-    foreach (Vector3Int pos in visibleTiles) {
-      if (!state.tiles[(Vector3)pos].isExplored) {
-        state.tiles[(Vector3)pos].isExplored = true;
+    foreach (Vector3Int pos in VisibleTiles) {
+      if (!State.tiles[(Vector3)pos].isExplored) {
+        State.tiles[(Vector3)pos].isExplored = true;
       }
 
-      state.tiles[(Vector3)pos].isVisible = false;
-      fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f));
+      State.tiles[(Vector3)pos].isVisible = false;
+      FogMap.SetColor(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f));
     }
 
-    visibleTiles.Clear();
+    VisibleTiles.Clear();
 
     foreach (Vector3Int pos in playerFOV) {
-      state.tiles[(Vector3)pos].isVisible = true;
-      fogMap.SetColor(pos, Color.clear);
-      visibleTiles.Add(pos);
+      State.tiles[(Vector3)pos].isVisible = true;
+      FogMap.SetColor(pos, Color.clear);
+      VisibleTiles.Add(pos);
     }
   }
 
@@ -116,9 +116,9 @@ public class MapManager : MonoBehaviour {
         continue;
       }
 
-      Vector3Int entityPosition = floorMap.WorldToCell(entity.transform.position);
+      Vector3Int entityPosition = FloorMap.WorldToCell(entity.transform.position);
 
-      if (visibleTiles.Contains(entityPosition)) {
+      if (VisibleTiles.Contains(entityPosition)) {
         entity.GetComponent<SpriteRenderer>().enabled = true;
       } else {
         entity.GetComponent<SpriteRenderer>().enabled = false;
@@ -127,8 +127,8 @@ public class MapManager : MonoBehaviour {
   }
 
   public bool IsValidPosition(Vector3 futurePosition) {
-    Vector3Int gridPosition = floorMap.WorldToCell(futurePosition);
-    if (!InBounds(gridPosition.x, gridPosition.y) || obstacleMap.HasTile(gridPosition)) {
+    Vector3Int gridPosition = FloorMap.WorldToCell(futurePosition);
+    if (!InBounds(gridPosition.x, gridPosition.y) || ObstacleMap.HasTile(gridPosition)) {
       return false;
     }
     return true;
@@ -146,56 +146,57 @@ public class MapManager : MonoBehaviour {
         isVisible: false
       );
 
-      state.tiles.Add((Vector3)pos, tile);
+      
+      State.tiles.Add((Vector3)pos, tile);
     }
   }
 
   private void SetupFogMap() {
-    foreach (Vector3 pos in state.tiles.Keys)
+    foreach (Vector3 pos in State.tiles.Keys)
     {
       Vector3Int posInt = new Vector3Int((int)pos.x, (int)pos.y, (int)pos.z);
-      fogMap.SetTile(posInt, fogTile);
-      fogMap.SetTileFlags(posInt, TileFlags.None);
+      FogMap.SetTile(posInt, FogTile);
+      FogMap.SetTileFlags(posInt, TileFlags.None);
 
-      if (state.tiles[pos].isExplored) {
-        fogMap.SetColor(posInt, new Color(1.0f, 1.0f, 1.0f, 0.5f));
+      if (State.tiles[pos].isExplored) {
+        FogMap.SetColor(posInt, new Color(1.0f, 1.0f, 1.0f, 0.5f));
       } else {
-        fogMap.SetColor(posInt, Color.white);
+        FogMap.SetColor(posInt, Color.white);
       }
     }
   }
 
   private void Reset() {
-    state = new MapState();
-    visibleTiles.Clear();
-    nodes.Clear();
+    State = new MapState();
+    VisibleTiles.Clear();
+    Nodes.Clear();
 
-    floorMap.ClearAllTiles();
-    obstacleMap.ClearAllTiles();
-    fogMap.ClearAllTiles();
+    FloorMap.ClearAllTiles();
+    ObstacleMap.ClearAllTiles();
+    FogMap.ClearAllTiles();
   }
 
   public void LoadState(MapState savedState) {
-    if (floorMap.cellBounds.size.x > 0) {
+    if (FloorMap.cellBounds.size.x > 0) {
       Reset();
     }
 
-    state.Load(savedState);
+    State.Load(savedState);
 
-    if (visibleTiles.Count > 0) {
-      visibleTiles.Clear();
+    if (VisibleTiles.Count > 0) {
+      VisibleTiles.Clear();
     }
 
-    foreach (Vector3 pos in state.tiles.Keys) {
+    foreach (Vector3 pos in State.tiles.Keys) {
       Vector3Int posInt = new Vector3Int((int)pos.x, (int)pos.y, (int)pos.z);
-      if (state.tiles[pos].name == floorTile.name) {
-        floorMap.SetTile(posInt, floorTile);
-      } else if (state.tiles[pos].name == wallTile.name) {
-        obstacleMap.SetTile(posInt, wallTile);
-      } else if (state.tiles[pos].name == upStairsTile.name) {
-        floorMap.SetTile(posInt, upStairsTile);
-      } else if (state.tiles[pos].name == downStairsTile.name) {
-        floorMap.SetTile(posInt, downStairsTile);
+      if (State.tiles[pos].name == FloorTile.name) {
+        FloorMap.SetTile(posInt, FloorTile);
+      } else if (State.tiles[pos].name == WallTile.name) {
+        ObstacleMap.SetTile(posInt, WallTile);
+      } else if (State.tiles[pos].name == UpStairsTile.name) {
+        FloorMap.SetTile(posInt, UpStairsTile);
+      } else if (State.tiles[pos].name == DownStairsTile.name) {
+        FloorMap.SetTile(posInt, DownStairsTile);
       }
     }
     SetupFogMap();

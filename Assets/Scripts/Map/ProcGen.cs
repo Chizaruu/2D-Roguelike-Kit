@@ -108,7 +108,7 @@ sealed class ProcGen {
     }
 
     //Add the stairs to the last room.
-    MapManager.instance.floorMap.SetTile((Vector3Int)rooms[rooms.Count - 1].RandomPoint(), MapManager.instance.downStairsTile);
+    MapManager.instance.FloorMap.SetTile((Vector3Int)rooms[rooms.Count - 1].RandomPoint(), MapManager.instance.DownStairsTile);
 
     //Add the player to the first room.
     Vector3Int playerPos = (Vector3Int)rooms[0].RandomPoint();
@@ -117,7 +117,7 @@ sealed class ProcGen {
       playerPos = (Vector3Int)rooms[0].RandomPoint();
     }
 
-    MapManager.instance.floorMap.SetTile(playerPos, MapManager.instance.upStairsTile);
+    MapManager.instance.FloorMap.SetTile(playerPos, MapManager.instance.UpStairsTile);
 
     if (!isNewGame) {
       GameManager.instance.Actors[0].transform.position = new Vector3(playerPos.x + 0.5f, playerPos.y + 0.5f, 0);
@@ -173,19 +173,19 @@ sealed class ProcGen {
   }
 
   private bool SetWallTileIfEmpty(Vector3Int pos) {
-    if (MapManager.instance.floorMap.GetTile(pos)) {
+    if (MapManager.instance.FloorMap.GetTile(pos)) {
       return true;
     } else {
-      MapManager.instance.obstacleMap.SetTile(pos, MapManager.instance.wallTile);
+      MapManager.instance.ObstacleMap.SetTile(pos, MapManager.instance.WallTile);
       return false;
     }
   }
 
   private void SetFloorTile(Vector3Int pos) {
-    if (MapManager.instance.obstacleMap.GetTile(pos)) {
-      MapManager.instance.obstacleMap.SetTile(pos, null);
+    if (MapManager.instance.ObstacleMap.GetTile(pos)) {
+      MapManager.instance.ObstacleMap.SetTile(pos, null);
     }
-    MapManager.instance.floorMap.SetTile(pos, MapManager.instance.floorTile);
+    MapManager.instance.FloorMap.SetTile(pos, MapManager.instance.FloorTile);
   }
 
   private void PlaceEntities(RectangularRoom newRoom, int floorNumber) {

@@ -15,7 +15,7 @@ public class AI : MonoBehaviour
 
   public Vector2 GetDirectionToTarget(Vector3Int targetPosition)
   {
-    Vector3Int gridPosition = MapManager.instance.floorMap.WorldToCell(transform.position);
+    Vector3Int gridPosition = MapManager.instance.FloorMap.WorldToCell(transform.position);
     Vector2 direction = AStar.Compute((Vector2Int)gridPosition, (Vector2Int)targetPosition);
     return direction;
   }

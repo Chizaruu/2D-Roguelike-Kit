@@ -41,7 +41,7 @@ public class AStar : MonoBehaviour {
       for (int y = -1; y <= 1; y++) {
         Vector2Int neighbourPos = new Vector2Int(parentPosition.x - x, parentPosition.y - y);
         if (y != 0 || x != 0) {
-          if (neighbourPos != start && MapManager.instance.floorMap.GetTile((Vector3Int)neighbourPos)) {
+          if (neighbourPos != start && MapManager.instance.FloorMap.GetTile((Vector3Int)neighbourPos)) {
             Node neighbour = GetNode(neighbourPos);
             neighbours.Add(neighbour);
           }
@@ -111,11 +111,11 @@ public class AStar : MonoBehaviour {
 
   /// <summary> Gets the node </summary>
   private Node GetNode(Vector2Int position) {
-    if (MapManager.instance.nodes.ContainsKey(position)) {
-      return MapManager.instance.nodes[position];
+    if (MapManager.instance.Nodes.ContainsKey(position)) {
+      return MapManager.instance.Nodes[position];
     } else {
       Node node = new Node(position);
-      MapManager.instance.nodes.Add(position, node);
+      MapManager.instance.Nodes.Add(position, node);
       return node;
     }
   }

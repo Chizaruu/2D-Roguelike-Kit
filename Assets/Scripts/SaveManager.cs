@@ -81,7 +81,7 @@ public class SaveManager : MonoBehaviour {
   public SceneState SaveState() => new SceneState(
     CurrentFloor,
     GameManager.instance.SaveState(),
-    MapManager.instance.state
+    MapManager.instance.State
   );
 
   public void LoadState(SceneState sceneState, bool canRemovePlayer) {

@@ -164,7 +164,7 @@ sealed class Player : MonoBehaviour, Controls.IPlayerActions {
     }
 
     if (targetMode) {
-      Vector3Int targetGridPosition = MapManager.instance.floorMap.WorldToCell(futurePosition);
+      Vector3Int targetGridPosition = MapManager.instance.FloorMap.WorldToCell(futurePosition);
 
       if (MapManager.instance.IsValidPosition(futurePosition) && GetComponent<Actor>().FieldOfView.Contains(targetGridPosition)) {
         targetObject.transform.position = futurePosition;
