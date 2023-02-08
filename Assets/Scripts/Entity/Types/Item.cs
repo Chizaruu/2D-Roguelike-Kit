@@ -1,16 +1,12 @@
-using System;
 using UnityEngine;
 
 public class Item : Entity {
-  [SerializeField] private Consumable consumable;
-  [SerializeField] private Equippable equippable;
-
-  public Consumable Consumable { get => consumable; }
-  public Equippable Equippable { get => equippable; }
+  [field: SerializeField] public Consumable Consumable { get; private set; }
+  [field: SerializeField] public Equippable Equippable { get; private set; }
 
   private void OnValidate() {
     if (GetComponent<Consumable>()) {
-      consumable = GetComponent<Consumable>();
+      Consumable = GetComponent<Consumable>();
     }
   }
 
@@ -26,15 +22,15 @@ public class Item : Entity {
 
   public void LoadState(ItemState state) {
     if (!state.IsVisible) {
-      GetComponent<SpriteRenderer>().enabled = false;
+      SpriteRenderer.enabled = false;
     }
 
     if (state.Parent is not "") {
       GameObject parent = GameObject.Find(state.Parent);
       parent.GetComponent<Inventory>().Add(this);
 
-      if (equippable is not null && state.Name.Contains("(E)")) {
-        parent.GetComponent<Equipment>().EquipToSlot(equippable.EquipmentType.ToString(), this, false);
+      if (Equippable is not null && state.Name.Contains("(E)")) {
+        parent.GetComponent<Equipment>().EquipToSlot(Equippable.EquipmentType.ToString(), this, false);
       }
     }
 
@@ -44,12 +40,10 @@ public class Item : Entity {
 
 [System.Serializable]
 public class ItemState : EntityState {
-  [SerializeField] private string parent;
-
-  public string Parent { get => parent; set => parent = value; }
+  [field: SerializeField] public string Parent { get; set; }
 
   public ItemState(EntityType type = EntityType.Item, string name = "", bool blocksMovement = false, bool isVisible = false, Vector3 position = new Vector3(),
    string parent = "") : base(type, name, blocksMovement, isVisible, position) {
-    this.parent = parent;
+    this.Parent = parent;
   }
 }
