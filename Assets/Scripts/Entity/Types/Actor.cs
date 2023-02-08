@@ -75,7 +75,7 @@ public class Actor : Entity {
     position: transform.position,
     currentAI: AI != null ? AI.SaveState() : null,
     fighterState: Fighter != null ? Fighter.State : null,
-    levelState: Level != null && GetComponent<Player>() ? Level.SaveState() : null
+    levelState: Level != null && GetComponent<Player>() ? Level.State : null
   );
 
   public void LoadState(ActorState savedState) {
@@ -106,7 +106,7 @@ public class Actor : Entity {
     }
 
     if (savedState.LevelState != null) {
-      Level.LoadState(savedState.LevelState);
+      Level.State.Load(savedState.LevelState);
     }
   }
 }

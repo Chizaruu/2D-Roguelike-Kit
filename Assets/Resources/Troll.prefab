@@ -169,12 +169,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11d70f02dea0075458dd292c1f43eb24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: 1
-  currentXp: 0
-  xpToNextLevel: 350
-  levelUpBase: 200
-  levelUpFactor: 150
-  xpGiven: 100
+  <State>k__BackingField:
+    levelUpBase: 200
+    levelUpFactor: 150
+    <CurrentLevel>k__BackingField: 1
+    <CurrentXp>k__BackingField: 0
+    <XpToNextLevel>k__BackingField: 350
+    <LevelPoints>k__BackingField: 0
+  <XpGiven>k__BackingField: 50
 --- !u!114 &4442182830498546135
 MonoBehaviour:
   m_ObjectHideFlags: 0

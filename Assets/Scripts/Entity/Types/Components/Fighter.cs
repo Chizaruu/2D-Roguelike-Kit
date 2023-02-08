@@ -72,7 +72,7 @@ public class Fighter : MonoBehaviour {
       if (GetComponent<Player>()) {
         UIManager.instance.AddMessage("You died!", "#ff0000"); //Red
       } else {
-        GameManager.instance.Actors[0].GetComponent<Level>().AddExperience(GetComponent<Level>().XPGiven); //Give XP to player
+        GameManager.instance.Actors[0].Level.State.AddExperience(GetComponent<Level>().XpGiven); //Give XP to player
         UIManager.instance.AddMessage($"{name} is dead!", "#ffa500"); //Light Orange
       }
       GetComponent<Actor>().IsAlive = false;
