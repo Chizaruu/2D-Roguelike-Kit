@@ -101,18 +101,18 @@ public class MapManager : MonoBehaviour {
 
   public void UpdateFogMap(List<Vector3Int> playerFOV) {
     foreach (Vector3Int pos in visibleTiles) {
-      if (!tiles[pos].IsExplored) {
-        tiles[pos].IsExplored = true;
+      if (!tiles[pos].isExplored) {
+        tiles[pos].isExplored = true;
       }
 
-      tiles[pos].IsVisible = false;
+      tiles[pos].isVisible = false;
       fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f));
     }
 
     visibleTiles.Clear();
 
     foreach (Vector3Int pos in playerFOV) {
-      tiles[pos].IsVisible = true;
+      tiles[pos].isVisible = true;
       fogMap.SetColor(pos, Color.clear);
       visibleTiles.Add(pos);
     }
@@ -165,7 +165,7 @@ public class MapManager : MonoBehaviour {
         fogMap.SetTileFlags(pos, TileFlags.None);
       }
 
-      if (tiles[pos].IsExplored) {
+      if (tiles[pos].isExplored) {
         fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f));
       } else {
         fogMap.SetColor(pos, Color.white);
@@ -198,13 +198,13 @@ public class MapManager : MonoBehaviour {
     }
 
     foreach (Vector3Int pos in tiles.Keys) {
-      if (tiles[pos].Name == floorTile.name) {
+      if (tiles[pos].name == floorTile.name) {
         floorMap.SetTile(pos, floorTile);
-      } else if (tiles[pos].Name == wallTile.name) {
+      } else if (tiles[pos].name == wallTile.name) {
         obstacleMap.SetTile(pos, wallTile);
-      } else if (tiles[pos].Name == upStairsTile.name) {
+      } else if (tiles[pos].name == upStairsTile.name) {
         floorMap.SetTile(pos, upStairsTile);
-      } else if (tiles[pos].Name == downStairsTile.name) {
+      } else if (tiles[pos].name == downStairsTile.name) {
         floorMap.SetTile(pos, downStairsTile);
       }
     }
