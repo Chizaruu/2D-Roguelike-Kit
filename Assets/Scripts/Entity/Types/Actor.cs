@@ -64,7 +64,7 @@ public class Actor : Entity {
   }
 
   public void UpdateFieldOfView() {
-    Vector3Int gridPosition = MapManager.instance.FloorMap.WorldToCell(transform.position);
+    Vector3Int gridPosition = MapManager.instance.floorMap.WorldToCell(transform.position);
 
     fieldOfView.Clear();
     algorithm.Compute(gridPosition, fieldOfViewRange, fieldOfView);
@@ -79,7 +79,7 @@ public class Actor : Entity {
     name: name,
     blocksMovement: BlocksMovement,
     isAlive: IsAlive,
-    isVisible: MapManager.instance.VisibleTiles.Contains(MapManager.instance.FloorMap.WorldToCell(transform.position)),
+    isVisible: MapManager.instance.visibleTiles.Contains(MapManager.instance.floorMap.WorldToCell(transform.position)),
     position: transform.position,
     currentAI: aI != null ? AI.SaveState() : null,
     fighterState: fighter != null ? fighter.SaveState() : null,

@@ -8,21 +8,21 @@ static public class Action {
   }
 
   static public void TakeStairsAction(Actor actor) {
-    Vector3Int pos = MapManager.instance.FloorMap.WorldToCell(actor.transform.position);
-    string tileName = MapManager.instance.FloorMap.GetTile(pos).name;
+    Vector3Int pos = MapManager.instance.floorMap.WorldToCell(actor.transform.position);
+    string tileName = MapManager.instance.floorMap.GetTile(pos).name;
 
-    if (tileName != MapManager.instance.UpStairsTile.name && tileName != MapManager.instance.DownStairsTile.name) {
+    if (tileName != MapManager.instance.upStairsTile.name && tileName != MapManager.instance.downStairsTile.name) {
       UIManager.instance.AddMessage("There are no stairs here.", "#0da2ff");
       return;
     }
 
-    if (SaveManager.instance.currentFloor == 1 && tileName == MapManager.instance.UpStairsTile.name) {
+    if (SaveManager.instance.currentFloor == 1 && tileName == MapManager.instance.upStairsTile.name) {
       UIManager.instance.AddMessage("A mysterious force prevents you from going back.", "#0da2ff");
       return;
     }
 
     SaveManager.instance.SaveGame();
-    SaveManager.instance.currentFloor += tileName == MapManager.instance.UpStairsTile.name ? -1 : 1;
+    SaveManager.instance.currentFloor += tileName == MapManager.instance.upStairsTile.name ? -1 : 1;
 
     if (SaveManager.instance.save.scenes.Exists(x => x.floorNumber == SaveManager.instance.currentFloor)) {
       SaveManager.instance.LoadScene(false);

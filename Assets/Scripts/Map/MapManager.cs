@@ -7,42 +7,30 @@ using UnityEngine.Tilemaps;
 public class MapManager : MonoBehaviour {
   public static MapManager instance;
 
-  [Header("Map Settings")]
-  [SerializeField] private int width = 80;
-  [SerializeField] private int height = 45;
+  [field: SerializeField] public MapState state { get; set; }
+
+  [field: Header("Map Settings")]
+  [field: SerializeField] public int width { get; private set;} = 80;
+  [field: SerializeField] public int height { get; private set;} = 45;
   [SerializeField] private int roomMaxSize = 10;
   [SerializeField] private int roomMinSize = 6;
   [SerializeField] private int maxRooms = 30;
 
-  [Header("Tiles")]
-  [SerializeField] private TileBase floorTile;
-  [SerializeField] private TileBase wallTile;
-  [SerializeField] private TileBase fogTile;
-  [SerializeField] private TileBase upStairsTile;
-  [SerializeField] private TileBase downStairsTile;
+  [field: Header("Tiles")]
+  [field: SerializeField] public TileBase floorTile { get; private set;}
+  [field: SerializeField] public TileBase wallTile { get; private set;}
+  [field: SerializeField] public TileBase fogTile { get; private set;}
+  [field: SerializeField] public TileBase upStairsTile { get; private set;}
+  [field: SerializeField] public TileBase downStairsTile { get; private set;}
 
-  [Header("Tilemaps")]
-  [SerializeField] private Tilemap floorMap;
-  [SerializeField] private Tilemap obstacleMap;
-  [SerializeField] private Tilemap fogMap;
+  [field: Header("Tilemaps")]
+  [field: SerializeField] public Tilemap floorMap { get; private set; }
+  [field: SerializeField] public Tilemap obstacleMap { get; private set; }
+  [field: SerializeField] public Tilemap fogMap { get; private set; }
 
-  [Header("Features")]
-  [SerializeField] private List<RectangularRoom> rooms;
-  [SerializeField] private List<Vector3Int> visibleTiles;
-  [SerializeField] private Dictionary<Vector3Int, TileData> tiles;
-  private Dictionary<Vector2Int, Node> nodes = new Dictionary<Vector2Int, Node>();
-
-  public int Width { get => width; }
-  public int Height { get => height; }
-  public TileBase FloorTile { get => floorTile; }
-  public TileBase WallTile { get => wallTile; }
-  public TileBase UpStairsTile { get => upStairsTile; }
-  public TileBase DownStairsTile { get => downStairsTile; }
-  public Tilemap FloorMap { get => floorMap; }
-  public Tilemap ObstacleMap { get => obstacleMap; }
-  public Tilemap FogMap { get => fogMap; }
-  public List<Vector3Int> VisibleTiles { get => visibleTiles; }
-  public Dictionary<Vector2Int, Node> Nodes { get => nodes; set => nodes = value; }
+  [field: Header("Features")]
+  [field: SerializeField] public List<Vector3Int> visibleTiles { get; private set; }
+  public Dictionary<Vector2Int, Node> nodes { get; set; } = new Dictionary<Vector2Int, Node>();
 
   private void Awake() {
     if (instance == null) {
@@ -62,6 +50,8 @@ public class MapManager : MonoBehaviour {
     } else {
       GenerateDungeon(true);
     }
+
+    SceneManager.sceneLoaded -= OnSceneLoaded;
   }
 
   private void Start() {
@@ -70,16 +60,18 @@ public class MapManager : MonoBehaviour {
   }
 
   public void GenerateDungeon(bool isNewGame = false) {
-    if (floorMap.cellBounds.size.x > 0) {
+    if (!isNewGame)
+    {
       Reset();
-    } else {
-      rooms = new List<RectangularRoom>();
-      tiles = new Dictionary<Vector3Int, TileData>();
+    }
+    else
+    {
+      state = new MapState();
       visibleTiles = new List<Vector3Int>();
     }
 
     ProcGen procGen = new ProcGen();
-    procGen.GenerateDungeon(width, height, roomMaxSize, roomMinSize, maxRooms, rooms, isNewGame);
+    procGen.GenerateDungeon(width, height, roomMaxSize, roomMinSize, maxRooms, state.rooms, isNewGame);
 
     AddTileMapToDictionary(floorMap);
     AddTileMapToDictionary(obstacleMap);
@@ -101,18 +93,18 @@ public class MapManager : MonoBehaviour {
 
   public void UpdateFogMap(List<Vector3Int> playerFOV) {
     foreach (Vector3Int pos in visibleTiles) {
-      if (!tiles[pos].isExplored) {
-        tiles[pos].isExplored = true;
+      if (!state.tiles[(Vector3)pos].isExplored) {
+        state.tiles[(Vector3)pos].isExplored = true;
       }
 
-      tiles[pos].isVisible = false;
+      state.tiles[(Vector3)pos].isVisible = false;
       fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f));
     }
 
     visibleTiles.Clear();
 
     foreach (Vector3Int pos in playerFOV) {
-      tiles[pos].isVisible = true;
+      state.tiles[(Vector3)pos].isVisible = true;
       fogMap.SetColor(pos, Color.clear);
       visibleTiles.Add(pos);
     }
@@ -154,28 +146,27 @@ public class MapManager : MonoBehaviour {
         isVisible: false
       );
 
-      tiles.Add(pos, tile);
+      state.tiles.Add((Vector3)pos, tile);
     }
   }
 
   private void SetupFogMap() {
-    foreach (Vector3Int pos in tiles.Keys) {
-      if (!fogMap.HasTile(pos)) {
-        fogMap.SetTile(pos, fogTile);
-        fogMap.SetTileFlags(pos, TileFlags.None);
-      }
+    foreach (Vector3 pos in state.tiles.Keys)
+    {
+      Vector3Int posInt = new Vector3Int((int)pos.x, (int)pos.y, (int)pos.z);
+      fogMap.SetTile(posInt, fogTile);
+      fogMap.SetTileFlags(posInt, TileFlags.None);
 
-      if (tiles[pos].isExplored) {
-        fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f));
+      if (state.tiles[pos].isExplored) {
+        fogMap.SetColor(posInt, new Color(1.0f, 1.0f, 1.0f, 0.5f));
       } else {
-        fogMap.SetColor(pos, Color.white);
+        fogMap.SetColor(posInt, Color.white);
       }
     }
   }
 
   private void Reset() {
-    rooms.Clear();
-    tiles.Clear();
+    state = new MapState();
     visibleTiles.Clear();
     nodes.Clear();
 
@@ -184,28 +175,27 @@ public class MapManager : MonoBehaviour {
     fogMap.ClearAllTiles();
   }
 
-  public MapState SaveState() => new MapState(tiles, rooms);
-
-  public void LoadState(MapState mapState) {
+  public void LoadState(MapState savedState) {
     if (floorMap.cellBounds.size.x > 0) {
       Reset();
     }
 
-    rooms = mapState.StoredRooms;
-    tiles = mapState.StoredTiles.ToDictionary(x => new Vector3Int((int)x.Key.x, (int)x.Key.y, (int)x.Key.z), x => x.Value);
+    state.Load(savedState);
+
     if (visibleTiles.Count > 0) {
       visibleTiles.Clear();
     }
 
-    foreach (Vector3Int pos in tiles.Keys) {
-      if (tiles[pos].name == floorTile.name) {
-        floorMap.SetTile(pos, floorTile);
-      } else if (tiles[pos].name == wallTile.name) {
-        obstacleMap.SetTile(pos, wallTile);
-      } else if (tiles[pos].name == upStairsTile.name) {
-        floorMap.SetTile(pos, upStairsTile);
-      } else if (tiles[pos].name == downStairsTile.name) {
-        floorMap.SetTile(pos, downStairsTile);
+    foreach (Vector3 pos in state.tiles.Keys) {
+      Vector3Int posInt = new Vector3Int((int)pos.x, (int)pos.y, (int)pos.z);
+      if (state.tiles[pos].name == floorTile.name) {
+        floorMap.SetTile(posInt, floorTile);
+      } else if (state.tiles[pos].name == wallTile.name) {
+        obstacleMap.SetTile(posInt, wallTile);
+      } else if (state.tiles[pos].name == upStairsTile.name) {
+        floorMap.SetTile(posInt, upStairsTile);
+      } else if (state.tiles[pos].name == downStairsTile.name) {
+        floorMap.SetTile(posInt, downStairsTile);
       }
     }
     SetupFogMap();
@@ -214,13 +204,17 @@ public class MapManager : MonoBehaviour {
 
 [System.Serializable]
 public class MapState {
-  [SerializeField] private Dictionary<Vector3, TileData> storedTiles;
-  [SerializeField] private List<RectangularRoom> storedRooms;
-  public Dictionary<Vector3, TileData> StoredTiles { get => storedTiles; set => storedTiles = value; }
-  public List<RectangularRoom> StoredRooms { get => storedRooms; set => storedRooms = value; }
+  [field: SerializeField] public Dictionary<Vector3, TileData> tiles { get; set; }
+  [field: SerializeField] public List<RectangularRoom> rooms { get; set; }
 
-  public MapState(Dictionary<Vector3Int, TileData> tiles, List<RectangularRoom> rooms) {
-    storedTiles = tiles.ToDictionary(x => (Vector3)x.Key, x => x.Value);
-    storedRooms = rooms;
+  public MapState() {
+    tiles = new Dictionary<Vector3, TileData>();
+    rooms = new List<RectangularRoom>();
+  }
+
+  public void Load(MapState savedState)
+  {
+    tiles = savedState.tiles;
+    rooms = savedState.rooms;
   }
 }

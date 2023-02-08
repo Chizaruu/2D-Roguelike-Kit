@@ -19,7 +19,7 @@ public class Item : Entity {
   public override EntityState SaveState() => new ItemState(
       name: name,
       blocksMovement: BlocksMovement,
-      isVisible: MapManager.instance.VisibleTiles.Contains(MapManager.instance.FloorMap.WorldToCell(transform.position)),
+      isVisible: MapManager.instance.visibleTiles.Contains(MapManager.instance.floorMap.WorldToCell(transform.position)),
       position: transform.position,
       parent: transform.parent != null ? transform.parent.gameObject.name : ""
     );

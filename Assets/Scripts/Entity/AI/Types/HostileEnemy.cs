@@ -18,7 +18,7 @@ public class HostileEnemy : AI {
     }
 
     if (fighter.Target) {
-      Vector3Int targetPosition = MapManager.instance.FloorMap.WorldToCell(fighter.Target.transform.position);
+      Vector3Int targetPosition = MapManager.instance.floorMap.WorldToCell(fighter.Target.transform.position);
       if (isFighting || GetComponent<Actor>().FieldOfView.Contains(targetPosition)) {
         if (!isFighting) {
           isFighting = true;
