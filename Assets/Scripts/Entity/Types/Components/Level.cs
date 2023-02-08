@@ -41,14 +41,14 @@ public class Level : MonoBehaviour {
   }
 
   public void IncreasePower(int amount = 1) {
-    GetComponent<Fighter>().BasePower += amount;
+    GetComponent<Fighter>().State.BasePower += amount;
 
     UIManager.instance.AddMessage($"You feel stronger!", "#00FF00"); //Green
     IncreaseLevel();
   }
 
   public void IncreaseDefense(int amount = 1) {
-    GetComponent<Fighter>().BaseDefense += amount;
+    GetComponent<Fighter>().State.BaseDefense += amount;
 
     UIManager.instance.AddMessage($"Your movements are getting swifter!", "#00FF00"); //Green
     IncreaseLevel();

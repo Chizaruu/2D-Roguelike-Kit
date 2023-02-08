@@ -206,14 +206,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <BlocksMovement>k__BackingField: 1
   <SpriteRenderer>k__BackingField: {fileID: 6134931932134907322}
-  <isAlive>k__BackingField: 1
+  <IsAlive>k__BackingField: 1
   fieldOfViewRange: 8
-  <fieldOfView>k__BackingField: []
-  <inventory>k__BackingField: {fileID: 2368456351757360051}
-  <equipment>k__BackingField: {fileID: 3980022478726739198}
-  <aI>k__BackingField: {fileID: 0}
-  <fighter>k__BackingField: {fileID: 3052805927703528690}
-  <level>k__BackingField: {fileID: -1773519499549426853}
+  <FieldOfView>k__BackingField: []
+  <Inventory>k__BackingField: {fileID: 2368456351757360051}
+  <Equipment>k__BackingField: {fileID: 3980022478726739198}
+  <AI>k__BackingField: {fileID: 0}
+  <Fighter>k__BackingField: {fileID: 3052805927703528690}
+  <Level>k__BackingField: {fileID: -1773519499549426853}
 --- !u!114 &3052805927703528690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,11 +226,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51a48956c5f0c5844a225ac0181751a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 30
-  hp: 30
-  baseDefense: 1
-  basePower: 2
-  target: {fileID: 0}
+  <State>k__BackingField:
+    <MaxHp>k__BackingField: 30
+    <Hp>k__BackingField: 30
+    <BaseDefense>k__BackingField: 1
+    <BasePower>k__BackingField: 2
+  <Target>k__BackingField: {fileID: 0}
 --- !u!114 &2368456351757360051
 MonoBehaviour:
   m_ObjectHideFlags: 0

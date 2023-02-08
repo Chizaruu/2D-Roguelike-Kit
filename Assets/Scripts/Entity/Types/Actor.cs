@@ -74,39 +74,39 @@ public class Actor : Entity {
     isVisible: MapManager.instance.visibleTiles.Contains(MapManager.instance.floorMap.WorldToCell(transform.position)),
     position: transform.position,
     currentAI: AI != null ? AI.SaveState() : null,
-    fighterState: Fighter != null ? Fighter.SaveState() : null,
+    fighterState: Fighter != null ? Fighter.State : null,
     levelState: Level != null && GetComponent<Player>() ? Level.SaveState() : null
   );
 
-  public void LoadState(ActorState state) {
-    transform.position = state.Position;
-    IsAlive = state.IsAlive;
+  public void LoadState(ActorState savedState) {
+    transform.position = savedState.Position;
+    IsAlive = savedState.IsAlive;
 
     if (!IsAlive) {
       GameManager.instance.RemoveActor(this);
     }
 
-    if (!state.IsVisible) {
+    if (!savedState.IsVisible) {
       SpriteRenderer.enabled = false;
     }
 
-    if (state.CurrentAI != null) {
-      if (state.CurrentAI.Type == "HostileEnemy") {
+    if (savedState.CurrentAI != null) {
+      if (savedState.CurrentAI.Type == "HostileEnemy") {
         AI = GetComponent<HostileEnemy>();
-      } else if (state.CurrentAI.Type == "ConfusedEnemy") {
+      } else if (savedState.CurrentAI.Type == "ConfusedEnemy") {
         AI = gameObject.AddComponent<ConfusedEnemy>();
 
-        ConfusedState confusedState = state.CurrentAI as ConfusedState;
+        ConfusedState confusedState = savedState.CurrentAI as ConfusedState;
         ((ConfusedEnemy)AI).LoadState(confusedState);
       }
     }
 
-    if (state.FighterState != null) {
-      Fighter.LoadState(state.FighterState);
+    if (savedState.FighterState != null) {
+      Fighter.State.Load(savedState.FighterState);
     }
 
-    if (state.LevelState != null) {
-      Level.LoadState(state.LevelState);
+    if (savedState.LevelState != null) {
+      Level.LoadState(savedState.LevelState);
     }
   }
 }

@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour {
   private Queue<Actor> actorQueue = new Queue<Actor>();
 
   [field: Header("Death")]
-  [field: SerializeField] public Sprite deadSprite { get; private set; }
+  [field: SerializeField] public Sprite DeadSprite { get; private set; }
 
   private void Awake() {
     if (instance == null) {
