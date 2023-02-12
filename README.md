@@ -11,3 +11,7 @@ Create your dream 2D roguelike game in no time with the 2D Roguelike Kit.
 - 2D Features (Template)
 - Input System
 - TextMeshPro
+
+## Contribute
+
+Do you want to help improve this kit? Great! You can contribute by submitting pull requests with updates or additions to the content. If you find any mistakes, feel free to report the issues to us. Your contributions are always welcome!
