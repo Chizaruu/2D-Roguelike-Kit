@@ -205,7 +205,6 @@ namespace TheSleepyKoala
           if (entityName == "Player" && !canPlacePlayer)
           {
             Actors[0].transform.position = entityStates[entityState].Position;
-            RefreshPlayer();
             entityState++;
             continue;
           }
@@ -234,6 +233,8 @@ namespace TheSleepyKoala
 
         entityState++;
       }
+
+      RefreshPlayer();
       IsPlayerTurn = true; //Allows player to move after load
     }
 
